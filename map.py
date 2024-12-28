@@ -26,19 +26,19 @@ def map(file_path, dropdown_options):
         dropdown.set('')
         
         #try to map first name
-        if ( h.contains("first") && h.contains("name")):
+        if ( h.contains("first") and h.contains("name")):
             dropdown_options[0].set(headers[idx])
         #try to map last name
-        elif ( h.contains("last") && h.contains("name")):
+        elif ( h.contains("last") and h.contains("name")):
             dropdown_options[1].set(headers[idx])
         #try to map email
-        elif ( h.contains("e-mail") || h.contains("email")):
+        elif ( h.contains("e-mail") or h.contains("email")):
             dropdown_options[2].set(headers[idx])
         #try to map phone
-        elif ( h.contains("phone") || h.contains("mobile")):
+        elif ( h.contains("phone") or h.contains("mobile")):
             dropdown_options[3].set(headers[idx])
         #try to map street
-        elif ( h.contains("street") || h.contains("address")):
+        elif ( h.contains("street") or h.contains("address")):
             dropdown_options[4].set(headers[idx])
        #try to map city
         elif ( h.contains("city") ):
