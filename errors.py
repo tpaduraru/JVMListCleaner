@@ -21,5 +21,6 @@ class Error_Window:
             print(self.check_state.get('1.0', tk.END))
         else:
             messagebox.showinfo(title="Message", message=self.textbox.get('1.0', tk.END))
+            self.textbox.config(state=tk.DISABLED)
             
         self.root.mainloop()

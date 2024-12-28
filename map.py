@@ -1,17 +1,26 @@
-'''
-email["email1@gmail.com", 0]
+# need to be able to validate the different fields like address and email
+# populate the column drop downs and make sure that the email and such are valid
+# verify the emails have @ and . e.g. "aaaa@aaa.a" is valid 
+# create a function called "proper" that will make the first letter capitalized of every name, including in emails and addresses
 
-into a class
+import csv
+#from tkinter import ttk
 
-'''
+def map(file_path, dropdowns):
+    if not file_path:
+        print("No file selected for mapping.")
+        return
 
-'''class model:
-    model.list # how to get the map
-    model.verify # how it will verify the arrays
-    modify.header # return a list of strings of the headers'''
+    try:
+        with open(file_path, 'r') as file:
+            reader = csv.reader(file)
+            headers = next(reader)  
+    except Exception as e:
+        print(f"Error reading file: {e}")
+        return
 
-def handle_map():
-    # Simulate mapping logic
-    print("Mapping functionality triggered!")
-
-    
+    # Populate dropdowns with headers from the CSV
+    for dropdown in dropdowns:
+        dropdown['values'] = headers
+        dropdown.set('')
+        
