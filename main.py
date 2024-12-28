@@ -16,11 +16,11 @@ def select_files():
     filenames = filedialog.askopenfilenames(filetypes=[("CSV Files", "*.csv")])
     if filenames:
         # Use the first file from the selection
-        selected_file.set(filenames[0])
+        input_file.set(filenames[0])
         file_names = ", ".join([os.path.basename(file) for file in filenames])
         file_label_var.set(file_names)
     else:
-        selected_file.set("") 
+        input_file.set("") 
         file_label_var.set("No files selected")
 
 def check_status():
@@ -46,7 +46,7 @@ File_Title.pack(anchor="w", padx=20, pady=5)
 Select_Title = tk.Label(root, text="Choose File: ", font=('Arial', 12))
 Select_Title.pack(anchor="w", padx=20, pady=5)
 
-selected_file = tk.StringVar()
+input_file = tk.StringVar()
 file_label_var = tk.StringVar()
 file_label_var.set("No files selected")
 
@@ -68,11 +68,11 @@ overwrite_button = tk.Button(root, text="Save As", command=select_files)
 overwrite_button.pack(anchor="w", padx=40, pady=5)
 
 # Map Button
-map_button = tk.Button(root, text='Map', command=lambda: map(selected_file.get(), dropdown_options))
+map_button = tk.Button(root, text='Map', command=lambda: map(input_file.get(), dropdown_options))
 map_button.pack(anchor="w", padx=20, pady=20)
 
 # Verify Button
-verify_button = tk.Button(root, text='Verify', command=lambda: verify(selected_file.get(), dropdown_options))
+verify_button = tk.Button(root, text='Verify', command=lambda: verify(input_file.get(), dropdown_options))
 verify_button.place(x=600, y=375)
 
 # Errors Section
