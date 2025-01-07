@@ -53,37 +53,3 @@ def map(file_path, dropdown_options):
 
             
 
-
-'''    for idx, dropdown in enumerate(dropdown_options):
-        dropdown['values'] = headers
-        h = headers[idx].lower() # cleans
-        dropdown.set('')
-        
-        #try to map first name
-        if ( h.find("first") and h.find("name")):
-            dropdown_options[0].set(headers[idx])
-        #try to map last name
-        elif ( h.find("last") and h.find("name")):
-            dropdown_options[1].set(headers[idx])
-        #try to map email
-        elif ( h.find("e-mail") or h.find("email")):
-            dropdown_options[2].set(headers[idx])
-        #try to map phone
-        elif ( h.find("phone") or h.find("mobile")):
-            dropdown_options[3].set(headers[idx])
-        #try to map street
-        elif ( h.find("street") or h.find("address")):
-            dropdown_options[4].set(headers[idx])
-       #try to map city
-        elif ( h.find("city") ):
-            dropdown_options[5].set(headers[idx])
-        # try to map state
-        elif ( h.find("state") ):
-            dropdown_options[5].set(headers[idx])
-        # try to map zip
-        elif ( h.find("zip") ):
-            dropdown_options[5].set(headers[idx])
-        # try to map county
-        elif ( h.find("county") ):
-            dropdown_options[5].set(headers[idx])'''
-        

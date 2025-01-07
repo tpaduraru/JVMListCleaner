@@ -7,9 +7,6 @@ from errors import Error_Window
 from map import map
 from verify import verify
 
-''' 
-Model = the list/array that you are manipulating. View = tkinter + output csv. Controller = tkinter buttons
-'''
 
 
 def select_files():
