@@ -5,18 +5,23 @@ from tkinter import ttk
 from errors import Error_Window
 from map import map
 from verify import verify
+from jvmlist import JVMList
 
+
+jl = JVMList()
 
 
 def select_files():
-    filenames = filedialog.askopenfilenames(filetypes=[("CSV Files", "*.csv")])
-    if filenames:
+    file_names = filedialog.askopenfilenames(filetypes=[("CSV Files", "*.csv")])
+    if file_names:
         # Use the first file from the selection
-        input_file.set(filenames[0])
-        file_names = ", ".join([os.path.basename(file) for file in filenames])
-        file_label_var.set(file_names)
+        # TO DO error when more than 1 selected
+        jl.input_file_path.set(file_names[0])
+        jl.input_file_path = file_names[0]
+        file_name_short = ", ".join([os.path.basename(file) for file in file_names])
+        file_label_var.set(file_name_short)
     else:
-        input_file.set("") 
+        jl.input_file_path.set("") 
         file_label_var.set("No files selected")
 
 def check_status():
@@ -25,6 +30,11 @@ def check_status():
     else:
         print("Checkbox is not checked")
 
+def update_field_dict(event):
+    for idx, dropdown in enumerate(jl.dropdown_options):
+        header = dropdown.get()
+        if header: 
+            jl.field_dict[jl.fields[idx]] = header
 
 
 # Initialize root window
@@ -35,19 +45,19 @@ root.title("JVM List Cleaner")
 
 
 # Title
-Title = tk.Label(root, text="List Cleaner", font=('Arial', 18))
-Title.pack(anchor="w", padx=20, pady=10)
+title = tk.Label(root, text="List Cleaner", font=('Arial', 18))
+title.pack(anchor="w", padx=20, pady=10)
 
 
 
 # File Uploads Section
-File_Title = tk.Label(root, text="File Select", font=('Arial', 14))
-File_Title.pack(anchor="w", padx=20, pady=5)
+file_title = tk.Label(root, text="File Select", font=('Arial', 14))
+file_title.pack(anchor="w", padx=20, pady=5)
 
-Select_Title = tk.Label(root, text="Choose File: ", font=('Arial', 12))
-Select_Title.pack(anchor="w", padx=20, pady=5)
+select_title = tk.Label(root, text="Choose File: ", font=('Arial', 12))
+select_title.pack(anchor="w", padx=20, pady=5)
 
-input_file = tk.StringVar()
+jl.input_file_path = tk.StringVar()
 file_label_var = tk.StringVar()
 file_label_var.set("No files selected")
 
@@ -60,8 +70,8 @@ file_label.pack(anchor="w", padx=40, pady=5)
 
 
 # Overwrite Section
-Overwrite_Box = tk.Label(root, text="Overwrite the Original File?", font=('Arial', 12))
-Overwrite_Box.pack(anchor="w", padx=20, pady=5)
+overwrite_box = tk.Label(root, text="Overwrite the Original File?", font=('Arial', 12))
+overwrite_box.pack(anchor="w", padx=20, pady=5)
 
 check_var = tk.IntVar()
 checkbox = tk.Checkbutton(root, variable=check_var, relief="ridge", bd=2)
@@ -73,32 +83,32 @@ overwrite_button.pack(anchor="w", padx=40, pady=5)
 
 
 # Map Button
-map_button = tk.Button(root, text='Map', command=lambda: map(input_file.get(), dropdown_options, fields, field_dict))
+map_button = tk.Button(root, text='Map', command=lambda: map(jl))
 map_button.pack(anchor="w", padx=20, pady=20)
-
+# map_button = tk.Button(root, text='Map', command=lambda: map(input_file_path.get(), jl.dropdown_options, jl.fields, jl.field_dict, jl))
 
 
 # Verify Button
-verify_button = tk.Button(root, text='Verify', command=lambda: verify(input_file.get(), dropdown_options,fields, field_dict))
+verify_button = tk.Button(root, text='Verify', command=lambda: verify(jl))
 verify_button.place(x=600, y=375)
-
+# verify_button = tk.Button(root, text='Verify', command=lambda: verify(input_file_btn.get(), jl.field_dict, jl))
 
 
 # Errors Section
-Error_Title = tk.Label(root, text="Errors", font=('Arial', 14))
-Error_Title.pack(anchor="w", padx=20, pady=5)
+error_title = tk.Label(root, text="Errors", font=('Arial', 14))
+error_title.pack(anchor="w", padx=20, pady=5)
 
-Row_Count = tk.Label(root, text="Rows Read: ", font=('Arial', 12))
-Row_Count.pack(anchor="w", padx=40, pady=2)
+row_count = tk.Label(root, text="Rows Read: ", font=('Arial', 12))
+row_count.pack(anchor="w", padx=40, pady=2)
 
-Success_Count = tk.Label(root, text="Successful: ", font=('Arial', 12))
-Success_Count.pack(anchor="w", padx=40, pady=2)
+success_count = tk.Label(root, text="Successful: ", font=('Arial', 12))
+success_count.pack(anchor="w", padx=40, pady=2)
 
-Error_Count = tk.Label(root, text="Errors: ", font=('Arial', 12))
-Error_Count.pack(anchor="w", padx=40, pady=2)
+error_count = tk.Label(root, text="Errors: ", font=('Arial', 12))
+error_count.pack(anchor="w", padx=40, pady=2)
 
-ErrorView = tk.Button(root, text='View Errors', command=Error_Window)
-ErrorView.pack(anchor="w", padx=20, pady=10)
+error_view = tk.Button(root, text='View Errors', command=Error_Window)
+error_view.pack(anchor="w", padx=20, pady=10)
 
 
 
@@ -106,27 +116,25 @@ ErrorView.pack(anchor="w", padx=20, pady=10)
 dropdown_frame = tk.Frame(root)
 dropdown_frame.place(x=600, y=50)
 
-fields = [
+jl.fields = [
     "First Name", "Last Name", "Email", "Phone", "Street Address", "City", "State", "Zip Code", "County"
 ]
-field_dict = {}  # field type : csv header
-                 # populated by map, then passed off to verify
-                 # need to add code to update when a new combobox option is selected
-                 # smth like dropdown.bind("<<ComboboxSelected>>", update_field_dict)
-                 # def update_field_dict(event): for d in enumerate(dropdown) ...
-                 # im just saying, this would have been easier 
-                 # if you just created a class instead of passing all these variables between every function
-dropdown_options = []
+
+jl.field_dict = {}  # field type : csv header
+                 
+
+jl.dropdown_options = []
 
 # Create labels and dropdown menus
-for idx, field in enumerate(fields):
+for idx, field in enumerate(jl.fields):
     label = tk.Label(dropdown_frame, text=field, font=('Arial', 12))
     label.grid(row=idx, column=0, padx=10, pady=5, sticky="w")
 
     dropdown = ttk.Combobox(dropdown_frame, width=20) 
     dropdown.grid(row=idx, column=1, padx=10, pady=5)
-    dropdown_options.append(dropdown)
+    jl.dropdown_options.append(dropdown)
 
+    dropdown.bind("<<ComboboxSelected>>", update_field_dict)
 
 # Apply Theme
 #sv_ttk.set_theme("dark")

@@ -4,20 +4,17 @@
 # create a function called "proper" that will make the first letter capitalized of every name, including in emails and addresses
 
 import csv
+from jvmlist import JVMList
 
-def map(file_path, dropdown_options, fields, field_dict):
 
-    print("\n\nMAP FUNCTION")
-    print("OLD VALUES----------------------")
-    for x in field_dict:
-        print(x, " : ", field_dict[x])
+def map(jl):
 
-    if not file_path:
+    if not jl.input_file_path:
         print("No file selected for mapping.")
         return
 
     try:
-        with open(file_path, 'r') as file:
+        with open(jl.input_file_path, 'r', encoding='utf-8') as file:
             reader = csv.reader(file)
             headers = next(reader)  
     except Exception as e:
@@ -26,7 +23,7 @@ def map(file_path, dropdown_options, fields, field_dict):
 
 
     # Populate dropdown_options with headers from the CSV
-    for dropdown in dropdown_options:
+    for dropdown in jl.dropdown_options:
         dropdown['values'] = headers
         dropdown.set('')
         
@@ -40,7 +37,7 @@ def map(file_path, dropdown_options, fields, field_dict):
         4: ["address", "street"],   
         5: ["city"],                  
         6: ["state"],                  
-        7: ["zip"],                    
+        7: ["zip", "code", "postal"],                    
         8: ["county"] 
     }
 
@@ -51,15 +48,12 @@ def map(file_path, dropdown_options, fields, field_dict):
 
             # Check for keywords
             if all(keyword in h for keyword in keywords): # for ANDed keywords
-                dropdown_options[idx].set(header) 
-                field_dict[fields[idx]] = header
+                jl.dropdown_options[idx].set(header) 
+                jl.field_dict[jl.fields[idx]] = header
                 break
             elif any(keyword in h for keyword in keywords): # for ORed keywords
-                dropdown_options[idx].set(header) 
-                field_dict[fields[idx]] = header
+                jl.dropdown_options[idx].set(header) 
+                jl.field_dict[jl.fields[idx]] = header
                 break
 
-    print("NEW VALUES----------------------")
-    for x in field_dict:
-        print(x, " : ", field_dict[x])
             
