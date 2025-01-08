@@ -19,16 +19,16 @@ def select_files():
         jl.input_file_path.set(file_names[0])
         jl.input_file_path = file_names[0]
         file_name_short = ", ".join([os.path.basename(file) for file in file_names])
-        file_label_var.set(file_name_short)
+        input_file_label_var.set(file_name_short)
     else:
         jl.input_file_path.set("") 
-        file_label_var.set("No files selected")
+        input_file_label_var.set("No files selected")
 
-def check_status():
+'''def check_status():
     if check_var.get() == 1:
         print("Checkbox is checked")
     else:
-        print("Checkbox is not checked")
+        print("Checkbox is not checked") '''
 
 def update_field_dict(event):
     for idx, dropdown in enumerate(jl.dropdown_options):
@@ -51,47 +51,50 @@ title.pack(anchor="w", padx=20, pady=10)
 
 
 # File Uploads Section
-file_title = tk.Label(root, text="File Select", font=('Arial', 14))
-file_title.pack(anchor="w", padx=20, pady=5)
+input_file_title = tk.Label(root, text="Input File Select", font=('Arial', 14))
+input_file_title.pack(anchor="w", padx=20, pady=5)
 
-select_title = tk.Label(root, text="Choose File: ", font=('Arial', 12))
-select_title.pack(anchor="w", padx=20, pady=5)
+input_select_title = tk.Label(root, text="Choose File: ", font=('Arial', 12))
+input_select_title.pack(anchor="w", padx=20, pady=5)
 
 jl.input_file_path = tk.StringVar()
-file_label_var = tk.StringVar()
-file_label_var.set("No files selected")
+input_file_label_var = tk.StringVar()
+input_file_label_var.set("No files selected")
 
-select_button = tk.Button(root, text="Select File", command=select_files)
-select_button.pack(anchor="w", padx=40, pady=2)
+input_select_button = tk.Button(root, text="Select File", command=select_files)
+input_select_button.pack(anchor="w", padx=40, pady=2)
 
-file_label = tk.Label(root, textvariable=file_label_var, font=('Arial', 10), anchor="w", wraplength=1000)
-file_label.pack(anchor="w", padx=40, pady=5)
+input_file_label = tk.Label(root, textvariable=input_file_label_var, font=('Arial', 10), anchor="w", wraplength=1000)
+input_file_label.pack(anchor="w", padx=40, pady=5)
 
 
+# File Uploads Section
+output_file_title = tk.Label(root, text="Output File Select", font=('Arial', 14))
+output_file_title.pack(anchor="w", padx=20, pady=5)
 
-# Overwrite Section
-overwrite_box = tk.Label(root, text="Overwrite the Original File?", font=('Arial', 12))
-overwrite_box.pack(anchor="w", padx=20, pady=5)
+output_select_title = tk.Label(root, text="Choose File: ", font=('Arial', 12))
+output_select_title.pack(anchor="w", padx=20, pady=5)
 
-check_var = tk.IntVar()
-checkbox = tk.Checkbutton(root, variable=check_var, relief="ridge", bd=2)
-checkbox.pack(anchor="w", padx=40, pady=2)
+jl.output_file_path = tk.StringVar()
+output_file_label_var = tk.StringVar()
+output_file_label_var.set("No files selected")
 
-overwrite_button = tk.Button(root, text="Save As", command=select_files)
-overwrite_button.pack(anchor="w", padx=40, pady=5)
+output_select_button = tk.Button(root, text="Select File", command=select_files)
+output_select_button.pack(anchor="w", padx=40, pady=2)
+
+output_file_label = tk.Label(root, textvariable=output_file_label_var, font=('Arial', 10), anchor="w", wraplength=1000)
+output_file_label.pack(anchor="w", padx=40, pady=5)
 
 
 
 # Map Button
 map_button = tk.Button(root, text='Map', command=lambda: map(jl))
 map_button.pack(anchor="w", padx=20, pady=20)
-# map_button = tk.Button(root, text='Map', command=lambda: map(input_file_path.get(), jl.dropdown_options, jl.fields, jl.field_dict, jl))
 
 
 # Verify Button
 verify_button = tk.Button(root, text='Verify', command=lambda: verify(jl))
 verify_button.place(x=600, y=375)
-# verify_button = tk.Button(root, text='Verify', command=lambda: verify(input_file_btn.get(), jl.field_dict, jl))
 
 
 # Errors Section

@@ -2,14 +2,6 @@ import csv
 import re
 from jvmlist import JVMList
 
-# do verify with the fact that it will change all of the formatting for the the rows in the selected column for the hard coded format that is for each one
-# need to be able to validate the different fields like address and email
-# populate the column drop downs and make sure that the email and such are valid
-# verify the emails have @ and . e.g. "aaaa@aaa.a" is valid 
-# create a function called "proper" that will make the first letter capitalized of every name, including in emails and addresses
-
-# global variables to be accessed in errors.py
-
 # general proper function def verify(file_path, field_dict, jl):
 def verify(jl):
     updated_rows = [] # initialized list all
@@ -17,12 +9,15 @@ def verify(jl):
 
     with open(jl.input_file_path, "r", newline="", encoding='utf-8') as csvfile:
         reader = list(csv.DictReader(csvfile))
-        headers = reader[0].keys()
+        headers = list(reader[0].keys())
+        if "Errors" not in headers:
+            headers.append("Errors")
         
         for row in reader:
             jl.read_rows += 1  # Increment rows read counter
             updated_row = row.copy()
-            jl.successful_rows = True  # Assume row is valid until proven otherwise
+            row_be_good = True  # Assume row is valid until proven otherwise
+            error_msg = ""
 
             for field, column in jl.field_dict.items():
                 if column not in headers:
@@ -36,19 +31,25 @@ def verify(jl):
                 elif field == "Email":
                     updated_value = value if valid_email(value) else "INVALID"
                     if updated_value == "INVALID":
-                        jl.successful_rows = False
+                        row_be_good = False
+                        error_msg += 'Invalid email, '
                 elif field == "Phone":
                     updated_value = valid_phone(value) or "INVALID"
                     if updated_value == "INVALID":
-                        jl.successful_rows = False
+                        row_be_good = False
+                        error_msg += 'Invalid phone, '
                 elif field == "Street Address":
-                    updated_value = proper_case(value)
+                    updated_value = format_street(value)
                 elif field == "City":
                     updated_value = proper_case(value)
                 elif field == "State":
-                    updated_value = state_abbreviations.get(value.title(), "INVALID")
-                    if updated_value == "INVALID":
-                        jl.successful_rows = False
+                    if value.upper() in state_abbreviations.values():
+                        updated_value = value.upper()
+                    else:
+                        updated_value = state_abbreviations.get(value.title(), "INVALID")
+                        if updated_value == "INVALID":
+                            row_be_good = False
+                            error_msg += 'Invalid state, '
                 elif field == "Zip Code":
                     updated_value = format_zip(value)
                 elif field == "County":
@@ -56,16 +57,23 @@ def verify(jl):
                 else:
                     updated_value = value  # No change if the field is unrecognized
 
+                updated_row[column] = updated_value
+
+            updated_row["Errors"] = error_msg.strip(", ") if not row_be_good else ""
+        
             updated_rows.append(updated_row)
 
-        # Track the number of successesful and error rows
-        if jl.successful_rows:
-            pass
-        else:
-            jl.error_rows += 1
-            print(f"Row {jl.read_rows} failed formatting: {row}") # Temporary fstring printout until implementation of errors.py 
+            # Track the number of successesful and error rows
+            if row_be_good:
+                jl.successful_rows += 1
+            else:
+                jl.error_rows += 1
+                print(f"Row {jl.read_rows} failed formatting: {error_msg}") # Temporary fstring printout until implementation of errors.py 
+                print(f"Invalid Row: {row}")
 
     # Write back updated rows to the file or a new file
+
+    # add an if statement for whether or not the box is checked to change from just "_updated" to the selected csv
     output_file = jl.input_file_path.replace(".csv", "_updated.csv")
     with open(output_file, "w", newline="", encoding='utf-8') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=headers)
@@ -73,27 +81,35 @@ def verify(jl):
         writer.writerows(updated_rows)
 
     print(f"File saved in: {output_file}")
-    print(f"Rows read: {jl.read_rows}, Successful rows: {jl.read_rows - jl.error_rows}, Errors: {jl.error_rows}") # temp until we print out in errors.py
+    print(f"Rows read: {jl.read_rows}, Successful rows: {jl.successful_rows}, Errors: {jl.error_rows}") # temp until we print out in errors.py
 
 
 def proper_case(text):
-    return " ".join(word.capitalize() for word in text.split())
+    return " ".join(word.capitalize() for word in text.lower().split())
 
 def proper_name(name):
-    name = name.strip()
+    name = name.strip().lower()
     name = re.sub(r"(?<!\w)(mc)(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), name, flags=re.IGNORECASE)
     name = re.sub(r"(?<!\w)(o')(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), name, flags=re.IGNORECASE)
     return "-".join(proper_case(part) for part in name.split("-"))
 
 def valid_email(email):
-    return bool(re.match(r"^[^@]+@[^@]+\.[^@]+$", email))
+    return bool(re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email)) 
 
 def valid_phone(phone):
-    phone = re.sub(r"\D", "", phone)  # Strip of everything but numbers
-    return phone if len(phone) in [10, 11] else None
+    phone = re.sub("[^0-9]", "", phone) 
+    return phone
+
+def format_street(address):
+    def capitalize_word(word):
+        word = re.sub(r"(?<!\w)(Mc)(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), word, flags=re.IGNORECASE)
+        word = re.sub(r"(?<!\w)(O')(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), word, flags=re.IGNORECASE)
+        return word[0].upper() + word[1:].lower() if len(word) > 1 else word.upper()
+    return " ".join(capitalize_word(word) for word in address.split())
 
 def format_zip(zip):
-    return zip.split("-")[0] if "-" in zip else zip[:5]  
+    zip = re.sub(r"\D", "", zip)  
+    return zip[:5]
 
 
 state_abbreviations = {

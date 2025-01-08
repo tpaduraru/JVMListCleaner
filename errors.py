@@ -2,8 +2,6 @@ import tkinter as tk
 from tkinter import messagebox
 from jvmlist import JVMList
 
-
-
 class Error_Window:
     def __init__(self):
         self.root = tk.Tk()
