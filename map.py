@@ -4,9 +4,14 @@
 # create a function called "proper" that will make the first letter capitalized of every name, including in emails and addresses
 
 import csv
-#from tkinter import ttk
 
-def map(file_path, dropdown_options):
+def map(file_path, dropdown_options, fields, field_dict):
+
+    print("\n\nMAP FUNCTION")
+    print("OLD VALUES----------------------")
+    for x in field_dict:
+        print(x, " : ", field_dict[x])
+
     if not file_path:
         print("No file selected for mapping.")
         return
@@ -19,10 +24,12 @@ def map(file_path, dropdown_options):
         print(f"Error reading file: {e}")
         return
 
+
     # Populate dropdown_options with headers from the CSV
     for dropdown in dropdown_options:
         dropdown['values'] = headers
         dropdown.set('')
+        
 
     # Keywords for each dropdown field
     dropdown_keywords = {
@@ -45,11 +52,14 @@ def map(file_path, dropdown_options):
             # Check for keywords
             if all(keyword in h for keyword in keywords): # for ANDed keywords
                 dropdown_options[idx].set(header) 
+                field_dict[fields[idx]] = header
                 break
             elif any(keyword in h for keyword in keywords): # for ORed keywords
                 dropdown_options[idx].set(header) 
+                field_dict[fields[idx]] = header
                 break
 
-
+    print("NEW VALUES----------------------")
+    for x in field_dict:
+        print(x, " : ", field_dict[x])
             
-
