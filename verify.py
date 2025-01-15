@@ -1,11 +1,11 @@
 import csv
 import re
+import tkinter as tk
 from jvmlist import JVMList
 
 # general proper function def verify(file_path, field_dict, jl):
 def verify(jl):
     updated_rows = [] # initialized list all
-
 
     with open(jl.input_file_path, "r", newline="", encoding='utf-8') as csvfile:
         reader = list(csv.DictReader(csvfile))
@@ -80,6 +80,9 @@ def verify(jl):
         writer.writeheader()
         writer.writerows(updated_rows)
 
+    jl.row_count_str.set(jl.read_rows)
+    jl.successful_rows_str.set(jl.successful_rows)
+    jl.error_count_str.set(jl.error_rows)
     print(f"File saved in: {output_file}")
     print(f"Rows read: {jl.read_rows}, Successful rows: {jl.successful_rows}, Errors: {jl.error_rows}") # temp until we print out in errors.py
 

@@ -11,7 +11,12 @@ def map(jl):
     try:
         with open(jl.input_file_path, 'r', encoding='utf-8') as file:
             reader = csv.reader(file)
-            headers = next(reader)  
+            headers = next(reader) 
+
+            for row in reader:
+                if any(row):  # Only count non-empty rows
+                    jl.read_rows += 1
+
     except Exception as e:
         print(f"Error reading file: {e}")
         return
@@ -50,5 +55,8 @@ def map(jl):
                 jl.dropdown_options[idx].set(header) 
                 jl.field_dict[jl.fields[idx]] = header
                 break
+
+    jl.row_count_str.set(jl.read_rows)
+        
 
             
