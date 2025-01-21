@@ -105,8 +105,8 @@ def valid_phone(phone):
 
 def format_street(address):
     def capitalize_word(word):
-        word = re.sub(r"(?<!\w)(Mc)(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), word, flags=re.IGNORECASE)
-        word = re.sub(r"(?<!\w)(O')(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), word, flags=re.IGNORECASE)
+        word = re.sub(r"(?<!\w)(mc)(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), word, flags=re.IGNORECASE)
+        word = re.sub(r"(?<!\w)(o')(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), word, flags=re.IGNORECASE)
         return word[0].upper() + word[1:].lower() if len(word) > 1 else word.upper()
     return " ".join(capitalize_word(word) for word in address.split())
 

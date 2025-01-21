@@ -101,8 +101,8 @@ jl.error_count_str = tk.IntVar(value=jl.error_rows)
 jl.error_count = tk.Label(jl.root, textvariable=jl.error_count_str, font=('Arial', 12))
 jl.error_count.pack(anchor="w", padx=40, pady=2)
 
-error_view = tk.Button(jl.root, text='View Errors', command=Error_Window)
-error_view.pack(anchor="w", padx=20, pady=10)
+#error_view = tk.Button(jl.root, text='View Errors', command=Error_Window)
+#error_view.pack(anchor="w", padx=20, pady=10)
 
 
 

@@ -30,8 +30,8 @@ def map(jl):
 
     # Keywords for each dropdown field
     dropdown_keywords = {
-        0: ["first", "name"],         
-        1: ["last", "name"],    
+        0: ["first name", "firstname"],         
+        1: ["last name", "lastname"],    
         2: ["email", "e-mail"],     
         3: ["phone", "mobile"],        
         4: ["address", "street"],   
