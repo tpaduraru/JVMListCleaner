@@ -39,7 +39,7 @@ def update_field_dict(event):
 jl.root = tk.Tk()
 jl.root.geometry("1200x700")
 jl.root.title("JVM List Cleaner")
-
+jl.root.iconbitmap("res/icon.ico")
 
 
 # Title
