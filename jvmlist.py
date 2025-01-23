@@ -2,8 +2,7 @@ import io
 import tkinter as tk
 
 class JVMList:
-    input_file_path = ''
-    output_file_path = ''
+    input_file_path = None
     fields =[]
     field_dict = {}
     dropdown_options = []

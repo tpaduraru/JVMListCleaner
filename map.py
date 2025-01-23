@@ -4,12 +4,12 @@ from jvmlist import JVMList
 
 def map(jl):
 
-    if not jl.input_file_path:
+    if not jl.input_file_path.get():
         print("No file selected for mapping.")
         return
 
     try:
-        with open(jl.input_file_path, 'r', encoding='utf-8') as file:
+        with open(jl.input_file_path.get(), 'r', encoding='utf-8') as file:
             reader = csv.reader(file)
             headers = next(reader) 
 

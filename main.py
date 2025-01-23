@@ -7,24 +7,19 @@ from map import map
 from verify import verify
 from jvmlist import JVMList
 
-
-# remove output file section
-# remove the errors area
-
 jl = JVMList()
 
 
 def select_files():
     file_names = filedialog.askopenfilenames(filetypes=[("CSV Files", "*.csv")])
     if file_names:
-        # Use the first file from the selection
-        # TO DO error when more than 1 selected
-        jl.input_file_path.set(file_names[0])
-        jl.input_file_path = file_names[0]
+        input_file_path_var.set(file_names[0])
+        #jl.input_file_path = file_names[0]
         file_name_short = ", ".join([os.path.basename(file) for file in file_names])
         input_file_label_var.set(file_name_short)
+        jl.input_file_path = input_file_path_var
     else:
-        jl.input_file_path.set("") 
+        input_file_path_var.set("") 
         input_file_label_var.set("No files selected")
 
 
@@ -55,7 +50,8 @@ input_file_title.pack(anchor="w", padx=20, pady=5)
 input_select_title = tk.Label(jl.root, text="Choose File: ", font=('Arial', 12))
 input_select_title.pack(anchor="w", padx=20, pady=5)
 
-jl.input_file_path = tk.StringVar()
+input_file_path = tk.StringVar()
+input_file_path_var = input_file_path
 input_file_label_var = tk.StringVar()
 input_file_label_var.set("No files selected")
 
@@ -100,10 +96,6 @@ error_title.pack(anchor="w", padx=40, pady=2)
 jl.error_count_str = tk.IntVar(value=jl.error_rows)
 jl.error_count = tk.Label(jl.root, textvariable=jl.error_count_str, font=('Arial', 12))
 jl.error_count.pack(anchor="w", padx=40, pady=2)
-
-#error_view = tk.Button(jl.root, text='View Errors', command=Error_Window)
-#error_view.pack(anchor="w", padx=20, pady=10)
-
 
 
 # Dropdown Menus Section
