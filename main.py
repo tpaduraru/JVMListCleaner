@@ -2,22 +2,28 @@ import tkinter as tk
 from tkinter import filedialog
 import os
 from tkinter import ttk
-from errors import Error_Window
 from map import map
 from verify import verify
 from jvmlist import JVMList
 
 jl = JVMList()
 
-
 def select_files():
     file_names = filedialog.askopenfilenames(filetypes=[("CSV Files", "*.csv")])
     if file_names:
         input_file_path_var.set(file_names[0])
-        #jl.input_file_path = file_names[0]
+        jl.input_file_path = file_names[0]
         file_name_short = ", ".join([os.path.basename(file) for file in file_names])
         input_file_label_var.set(file_name_short)
         jl.input_file_path = input_file_path_var
+
+        jl.read_rows = 0
+        jl.successful_rows = 0
+        jl.error_rows = 0
+
+        jl.row_count_str.set(jl.read_rows)
+        jl.successful_rows_str.set(jl.successful_rows)
+        jl.error_count_str.set(jl.error_rows)
     else:
         input_file_path_var.set("") 
         input_file_label_var.set("No files selected")
@@ -66,6 +72,10 @@ input_file_label.pack(anchor="w", padx=40, pady=5)
 map_button = tk.Button(jl.root, text='Map', command=lambda: map(jl))
 map_button.pack(anchor="w", padx=20, pady=20)
 
+# ReMap Button
+#remap_button = tk.Button(root, text='Remap', command=lambda: map(jl))
+#remap_button.pack(anchor="w", padx=20, pady=20)
+
 
 # Verify Button
 verify_button = tk.Button(jl.root, text='Verify', command=lambda: verify(jl))
@@ -110,7 +120,10 @@ jl.fields = [
 
 jl.field_dict = {}  # field type : csv header
                  
+                 
 jl.dropdown_options = []
+
+jl.output_options = []
 
 # Create labels and dropdown menus
 for idx, field in enumerate(jl.fields):
@@ -122,6 +135,7 @@ for idx, field in enumerate(jl.fields):
     jl.dropdown_options.append(dropdown)
 
     dropdown.bind("<<ComboboxSelected>>", update_field_dict)
+
 
 # Apply Theme
 #sv_ttk.set_theme("dark")

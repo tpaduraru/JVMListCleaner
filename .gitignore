@@ -1,3 +1,4 @@
 
 /__pycache__
-*.lnk
+/*.lnk
+/state_abbreviations.txt

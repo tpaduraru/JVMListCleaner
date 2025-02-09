@@ -6,6 +6,7 @@ class JVMList:
     fields =[]
     field_dict = {}
     dropdown_options = []
+    output_options = []
     read_rows = 0
     successful_rows = 0
     error_rows = 0
