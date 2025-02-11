@@ -77,7 +77,7 @@ map_button.pack(anchor="w", padx=20, pady=20)
 
 
 # Verify Button
-verify_button = tk.Button(jl.root, text='CLean File', command=lambda: verify(jl))
+verify_button = tk.Button(jl.root, text='Clean File', command=lambda: verify(jl))
 verify_button.place(x=250, y=375)
 
 
