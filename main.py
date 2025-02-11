@@ -38,7 +38,7 @@ def update_field_dict(event):
 
 # Initialize root window
 jl.root = tk.Tk()
-jl.root.geometry("1200x700")
+jl.root.geometry("600x500")
 jl.root.title("JVM List Cleaner")
 jl.root.iconbitmap("res/icon.ico")
 
@@ -79,7 +79,7 @@ map_button.pack(anchor="w", padx=20, pady=20)
 
 # Verify Button
 verify_button = tk.Button(jl.root, text='Verify', command=lambda: verify(jl))
-verify_button.place(x=600, y=375)
+verify_button.place(x=250, y=375)
 
 
 # Errors Section
@@ -110,9 +110,9 @@ jl.error_count.pack(anchor="w", padx=40, pady=2)
 
 # Dropdown Menus Section
 dropdown_title = tk.Label(jl.root, text="Input File Mapping", font=('Arial', 14))
-dropdown_title.place(x=600, y=10)
+dropdown_title.place(x=250, y=10)
 dropdown_frame = tk.Frame(jl.root)
-dropdown_frame.place(x=600, y=50)
+dropdown_frame.place(x=250, y=50)
 
 jl.fields = [
     "First Name", "Last Name", "Email", "Phone", "Street Address", "City", "State", "Zip Code", "County"
