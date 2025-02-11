@@ -44,9 +44,8 @@ jl.root.iconbitmap("res/icon.ico")
 
 
 # Title
-title = tk.Label(jl.root, text="List Cleaner", font=('Arial', 18))
-title.pack(anchor="w", padx=20, pady=10)
-
+#title = tk.Label(jl.root, text="List Cleaner", font=('Arial', 18))
+#title.pack(anchor="nw", padx=20, pady=10)
 
 
 # File Uploads Section
@@ -110,9 +109,9 @@ jl.error_count.pack(anchor="w", padx=40, pady=2)
 
 # Dropdown Menus Section
 dropdown_title = tk.Label(jl.root, text="Input File Mapping", font=('Arial', 14))
-dropdown_title.place(x=250, y=10)
+dropdown_title.place(x=250, y=5)
 dropdown_frame = tk.Frame(jl.root)
-dropdown_frame.place(x=250, y=50)
+dropdown_frame.place(x=250, y=55)
 
 jl.fields = [
     "First Name", "Last Name", "Email", "Phone", "Street Address", "City", "State", "Zip Code", "County"
