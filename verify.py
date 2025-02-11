@@ -72,11 +72,7 @@ def verify(jl):
                 print(f"Row {jl.read_rows} failed formatting: {error_msg}") # Temporary fstring printout until implementation of errors.py 
                 print(f"Invalid Row: {row}")
 
-    jl.row_count_str.set(jl.read_rows)
-    jl.successful_rows_str.set(jl.successful_rows)
-    jl.error_count_str.set(jl.error_rows)
-    print(f"File saved in: {output_file}")
-    print(f"Rows read: {jl.read_rows}, Successful rows: {jl.successful_rows}, Errors: {jl.error_rows}") # temp until we print out in errors.py
+    
 
     
     input_file_path_str = jl.input_file_path.get()
@@ -85,6 +81,12 @@ def verify(jl):
         writer = csv.DictWriter(csvfile, fieldnames=headers)
         writer.writeheader()
         writer.writerows(updated_rows)
+    
+    jl.row_count_str.set(jl.read_rows)
+    jl.successful_rows_str.set(jl.successful_rows)
+    jl.error_count_str.set(jl.error_rows)
+    print(f"File saved in: {output_file}")
+    print(f"Rows read: {jl.read_rows}, Successful rows: {jl.successful_rows}, Errors: {jl.error_rows}") # temp until we print out in errors.py
 
     
 
