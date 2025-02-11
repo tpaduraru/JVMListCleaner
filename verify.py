@@ -7,14 +7,15 @@ from jvmlist import JVMList
 def verify(jl):
     updated_rows = [] # initialized list all
 
-    with open(jl.input_file_path, "r", newline="", encoding='utf-8') as csvfile:
+    with open(jl.input_file_path.get(), "r", newline="", encoding='utf-8') as csvfile:
         reader = list(csv.DictReader(csvfile))
         headers = list(reader[0].keys())
+        
         if "Errors" not in headers:
             headers.append("Errors")
         
         for row in reader:
-            jl.read_rows += 1  # Increment rows read counter
+            #jl.read_rows += 1  # Increment rows read counter
             updated_row = row.copy()
             row_be_good = True  # Assume row is valid until proven otherwise
             error_msg = ""
@@ -29,13 +30,13 @@ def verify(jl):
                 elif field == "Last Name":
                     updated_value = proper_name(value)
                 elif field == "Email":
-                    updated_value = value if valid_email(value) else "INVALID"
-                    if updated_value == "INVALID":
+                    updated_value = value if valid_email(value) else ""
+                    if updated_value == "":
                         row_be_good = False
                         error_msg += 'Invalid email, '
                 elif field == "Phone":
-                    updated_value = valid_phone(value) or "INVALID"
-                    if updated_value == "INVALID":
+                    updated_value = valid_phone(value) or ""
+                    if updated_value == "":
                         row_be_good = False
                         error_msg += 'Invalid phone, '
                 elif field == "Street Address":
@@ -46,8 +47,8 @@ def verify(jl):
                     if value.upper() in state_abbreviations.values():
                         updated_value = value.upper()
                     else:
-                        updated_value = state_abbreviations.get(value.title(), "INVALID")
-                        if updated_value == "INVALID":
+                        updated_value = state_abbreviations.get(value.title(), "")
+                        if updated_value == "":
                             row_be_good = False
                             error_msg += 'Invalid state, '
                 elif field == "Zip Code":
@@ -71,21 +72,21 @@ def verify(jl):
                 print(f"Row {jl.read_rows} failed formatting: {error_msg}") # Temporary fstring printout until implementation of errors.py 
                 print(f"Invalid Row: {row}")
 
-    # Write back updated rows to the file or a new file
-
-    # add an if statement for whether or not the box is checked to change from just "_updated" to the selected csv
-    output_file = jl.input_file_path.replace(".csv", "_updated.csv")
-    with open(output_file, "w", newline="", encoding='utf-8') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=headers)
-        writer.writeheader()
-        writer.writerows(updated_rows)
-
     jl.row_count_str.set(jl.read_rows)
     jl.successful_rows_str.set(jl.successful_rows)
     jl.error_count_str.set(jl.error_rows)
     print(f"File saved in: {output_file}")
     print(f"Rows read: {jl.read_rows}, Successful rows: {jl.successful_rows}, Errors: {jl.error_rows}") # temp until we print out in errors.py
 
+    
+    input_file_path_str = jl.input_file_path.get()
+    output_file = input_file_path_str.replace(".csv", "_output.csv")
+    with open(output_file, "w", newline="", encoding='utf-8') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=headers)
+        writer.writeheader()
+        writer.writerows(updated_rows)
+
+    
 
 def proper_case(text):
     return " ".join(word.capitalize() for word in text.lower().split())

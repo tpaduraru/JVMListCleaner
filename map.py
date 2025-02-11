@@ -13,6 +13,8 @@ def map(jl):
             reader = csv.reader(file)
             headers = next(reader) 
 
+            jl.read_rows = 0
+
             for row in reader:
                 if any(row):  # Only count non-empty rows
                     jl.read_rows += 1
@@ -20,6 +22,8 @@ def map(jl):
     except Exception as e:
         print(f"Error reading file: {e}")
         return
+    
+    jl.row_count_str.set(jl.read_rows)
 
 
     # Populate dropdown_options with headers from the CSV
