@@ -72,12 +72,6 @@ def verify(jl):
                 print(f"Row {jl.read_rows} failed formatting: {error_msg}") # Temporary fstring printout until implementation of errors.py 
                 print(f"Invalid Row: {row}")
 
-    jl.row_count_str.set(jl.read_rows)
-    jl.successful_rows_str.set(jl.successful_rows)
-    jl.error_count_str.set(jl.error_rows)
-    print(f"File saved in: {output_file}")
-    print(f"Rows read: {jl.read_rows}, Successful rows: {jl.successful_rows}, Errors: {jl.error_rows}") # temp until we print out in errors.py
-
     
     input_file_path_str = jl.input_file_path.get()
     output_file = input_file_path_str.replace(".csv", "_output.csv")
@@ -85,6 +79,15 @@ def verify(jl):
         writer = csv.DictWriter(csvfile, fieldnames=headers)
         writer.writeheader()
         writer.writerows(updated_rows)
+        
+        
+    jl.row_count_str.set(jl.read_rows)
+    jl.successful_rows_str.set(jl.successful_rows)
+    jl.error_count_str.set(jl.error_rows)
+    print(f"File saved in: {output_file}")
+    print(f"Rows read: {jl.read_rows}, Successful rows: {jl.successful_rows}, Errors: {jl.error_rows}") # temp until we print out in errors.py
+    
+    
 
     jl.row_count_str.set(jl.read_rows)
     jl.successful_rows_str.set(jl.successful_rows)
@@ -109,11 +112,12 @@ def valid_phone(phone):
     return phone
 
 def format_street(address):
-    def capitalize_word(word):
-        word = re.sub(r"(?<!\w)(mc)(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), word, flags=re.IGNORECASE)
-        word = re.sub(r"(?<!\w)(o')(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), word, flags=re.IGNORECASE)
-        return word[0].upper() + word[1:].lower() if len(word) > 1 else word.upper()
-    return " ".join(capitalize_word(word) for word in address.split())
+    out =" ".join(word.capitalize() for word in address.split()) # capitalizes each word
+    out = re.sub(r"(?<!\w)(mc)(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)# capitalizes McXxxx
+    out = re.sub(r"(?<!\w)(o')(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)# capitalizes O'Xxxx
+    out = re.sub(r"(\s[ns][ew]\s)", lambda m: m.group(1).upper(), out, flags=re.IGNORECASE)# capitalizes NE,NW,SE,SW
+    
+    return out
 
 def format_zip(zip):
     zip = re.sub(r"\D", "", zip)  
