@@ -43,11 +43,6 @@ jl.root.title("JVM List Cleaner")
 jl.root.iconbitmap("res/icon.ico")
 
 
-# Title
-#title = tk.Label(jl.root, text="List Cleaner", font=('Arial', 18))
-#title.pack(anchor="nw", padx=20, pady=10)
-
-
 # File Uploads Section
 input_file_title = tk.Label(jl.root, text="Input File Select", font=('Arial', 14))
 input_file_title.pack(anchor="w", padx=20, pady=5)
@@ -132,7 +127,5 @@ for idx, field in enumerate(jl.fields):
     dropdown.bind("<<ComboboxSelected>>", update_field_dict)
 
 
-# Apply Theme
-#sv_ttk.set_theme("dark")
 
 jl.root.mainloop()

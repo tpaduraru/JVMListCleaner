@@ -15,7 +15,6 @@ def verify(jl):
             headers.append("Errors")
         
         for row in reader:
-            #jl.read_rows += 1  # Increment rows read counter
             updated_row = row.copy()
             row_be_good = True  # Assume row is valid until proven otherwise
             error_msg = ""
