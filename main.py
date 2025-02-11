@@ -43,11 +43,6 @@ jl.root.title("JVM List Cleaner")
 jl.root.iconbitmap("res/icon.ico")
 
 
-# Title
-#title = tk.Label(jl.root, text="List Cleaner", font=('Arial', 18))
-#title.pack(anchor="nw", padx=20, pady=10)
-
-
 # File Uploads Section
 input_file_title = tk.Label(jl.root, text="Input File Select", font=('Arial', 14))
 input_file_title.pack(anchor="w", padx=20, pady=5)
@@ -71,40 +66,36 @@ input_file_label.pack(anchor="w", padx=40, pady=5)
 map_button = tk.Button(jl.root, text='Map', command=lambda: map(jl))
 map_button.pack(anchor="w", padx=20, pady=20)
 
-# ReMap Button
-#remap_button = tk.Button(root, text='Remap', command=lambda: map(jl))
-#remap_button.pack(anchor="w", padx=20, pady=20)
-
 
 # Verify Button
-verify_button = tk.Button(jl.root, text='CLean File', command=lambda: verify(jl))
+verify_button = tk.Button(jl.root, text='Clean File', command=lambda: verify(jl))
 verify_button.place(x=250, y=375)
 
 
 # Errors Section
 error_title = tk.Label(jl.root, text="Errors", font=('Arial', 14))
-error_title.pack(anchor="w", padx=20, pady=5)
+error_title.pack(anchor="w", padx=25, pady=10)
 
 row_title = tk.Label(jl.root, text="Rows Read: ", font=('Arial', 12))
-row_title.pack(anchor="w", padx=40, pady=2)
+row_title.pack(anchor="w", padx=25, pady=10)
 
 jl.row_count_str = tk.IntVar(value=jl.read_rows)
 jl.row_count = tk.Label(jl.root, textvariable=jl.row_count_str, font=('Arial', 12))
-jl.row_count.pack(anchor="w", padx=40, pady=2)
+jl.row_count.place(x=125, y=258)
 
 success_title = tk.Label(jl.root, text="Successful: ", font=('Arial', 12))
-success_title.pack(anchor="w", padx=40, pady=2)
+success_title.pack(anchor="w", padx=25, pady=10)
 
 jl.successful_rows_str = tk.IntVar(value=jl.successful_rows)
 jl.success_count = tk.Label(jl.root, textvariable=jl.successful_rows_str, font=('Arial', 12))
-jl.success_count.pack(anchor="w", padx=40, pady=2)
+jl.success_count.place(x=125, y=302)
 
 error_title = tk.Label(jl.root, text="Errors: ", font=('Arial', 12))
-error_title.pack(anchor="w", padx=40, pady=2)
+error_title.pack(anchor="w", padx=25, pady=10)
 
 jl.error_count_str = tk.IntVar(value=jl.error_rows)
 jl.error_count = tk.Label(jl.root, textvariable=jl.error_count_str, font=('Arial', 12))
-jl.error_count.pack(anchor="w", padx=40, pady=2)
+jl.error_count.place(x=125, y=348)
 
 
 # Dropdown Menus Section
@@ -136,7 +127,5 @@ for idx, field in enumerate(jl.fields):
     dropdown.bind("<<ComboboxSelected>>", update_field_dict)
 
 
-# Apply Theme
-#sv_ttk.set_theme("dark")
 
 jl.root.mainloop()
