@@ -41,7 +41,7 @@ def verify(jl):
                 elif field == "Street Address":
                     updated_value = format_street(value)
                 elif field == "City":
-                    updated_value = proper_case(value)
+                    updated_value = proper_name(value)
                 elif field == "State":
                     if value.upper() in state_abbreviations.values():
                         updated_value = value.upper()
@@ -53,7 +53,7 @@ def verify(jl):
                 elif field == "Zip Code":
                     updated_value = format_zip(value)
                 elif field == "County":
-                    updated_value = proper_case(value)
+                    updated_value = proper_name(value)
                 else:
                     updated_value = value  # No change if the field is unrecognized
 
@@ -92,14 +92,11 @@ def verify(jl):
 
 
 
-def proper_case(text):
-    return " ".join(word.capitalize() for word in text.lower().split())
-
 def proper_name(name):
-    name = name.strip().lower()
-    name = re.sub(r"(?<!\w)(mc)(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), name, flags=re.IGNORECASE)
-    name = re.sub(r"(?<!\w)(o')(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), name, flags=re.IGNORECASE)
-    return "-".join(proper_case(part) for part in name.split("-"))
+    out =" ".join(word.capitalize() for word in name.split()) # capitalizes each word
+    out = re.sub(r"(?<!\w)(mc)(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)# capitalizes McXxxx
+    out = re.sub(r"(?<!\w)(')(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)# capitalizes O'Xxxx
+    return out
 
 def valid_email(email):
     return bool(re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email)) 
@@ -112,6 +109,7 @@ def format_street(address):
     out =" ".join(word.capitalize() for word in address.split()) # capitalizes each word
     out = re.sub(r"(?<!\w)(mc)(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)# capitalizes McXxxx
     out = re.sub(r"(?<!\w)(o')(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)# capitalizes O'Xxxx
+    out = re.sub(r"(?<!\w)(#)(\w)", lambda m: m.group(1).capitalize() + m.group(2).upper(), out, flags=re.IGNORECASE)# capitalizes #A33
     out = re.sub(r"(\s[ns][ew]\s)", lambda m: m.group(1).upper(), out, flags=re.IGNORECASE)# capitalizes NE,NW,SE,SW
     return out
 
@@ -121,61 +119,61 @@ def format_zip(zip):
 
 
 state_abbreviations = {
-"Alabama" : "AL",
-"Alaska" : "AK",
-"Arizona" : "AZ",
-"Arkansas" : "AR",
-"American Samoa" : "AS",
-"California" : "CA",
-"Colorado" : "CO",
-"Connecticut" : "CT",
-"Delaware" : "DE",
-"District of Columbia" : "DC",
-"Florida" : "FL",
-"Georgia" : "GA",
-"Guam" : "GU",
-"Hawaii" : "HI",
-"Idaho" : "ID",
-"Illinois" : "IL",
-"Indiana" : "IN",
-"Iowa" : "IA",
-"Kansas" : "KS",
-"Kentucky" : "KY",
-"Louisiana" : "LA",
-"Maine" : "ME",
-"Maryland" : "MD",
-"Massachusetts" : "MA",
-"Michigan" : "MI",
-"Minnesota" : "MN",
-"Mississippi" : "MS",
-"Missouri" : "MO",
-"Montana" : "MT",
-"Nebraska" : "NE",
-"Nevada" : "NV",
-"New Hampshire" : "NH",
-"Kentucky" : "KY",
-"Louisiana" : "LA",
-"Maine" : "ME",
-"Maryland" : "MD",
-"Massachusetts" : "MA",
-"Michigan" : "MI",
-"Ohio" : "OH",
-"Oklahoma" : "OK",
-"Oregon" : "OR",
-"Pennsylvania" : "PA",
-"Puerto Rico" : "PR",
-"Rhode Island" : "RI",
-"South Carolina" : "SC",
-"South Dakota" : "SD",
-"Tennessee" : "TN",
-"Texas" : "TX",
-"Trust Territories" : "TT",
-"Utah" : "UT",
-"Vermont" : "VT",
-"Virginia" : "VA",
-"Virgin Islands" : "VI",
-"Washington" : "WA",
-"West Virginia" : "WV",
-"Wisconsin" : "WI",
-"Wyoming" : "WY"
+    "Alabama" : "AL",
+    "Alaska" : "AK",
+    "Arizona" : "AZ",
+    "Arkansas" : "AR",
+    "American Samoa" : "AS",
+    "California" : "CA",
+    "Colorado" : "CO",
+    "Connecticut" : "CT",
+    "Delaware" : "DE",
+    "District of Columbia" : "DC",
+    "Florida" : "FL",
+    "Georgia" : "GA",
+    "Guam" : "GU",
+    "Hawaii" : "HI",
+    "Idaho" : "ID",
+    "Illinois" : "IL",
+    "Indiana" : "IN",
+    "Iowa" : "IA",
+    "Kansas" : "KS",
+    "Kentucky" : "KY",
+    "Louisiana" : "LA",
+    "Maine" : "ME",
+    "Maryland" : "MD",
+    "Massachusetts" : "MA",
+    "Michigan" : "MI",
+    "Minnesota" : "MN",
+    "Mississippi" : "MS",
+    "Missouri" : "MO",
+    "Montana" : "MT",
+    "Nebraska" : "NE",
+    "Nevada" : "NV",
+    "New Hampshire" : "NH",
+    "Kentucky" : "KY",
+    "Louisiana" : "LA",
+    "Maine" : "ME",
+    "Maryland" : "MD",
+    "Massachusetts" : "MA",
+    "Michigan" : "MI",
+    "Ohio" : "OH",
+    "Oklahoma" : "OK",
+    "Oregon" : "OR",
+    "Pennsylvania" : "PA",
+    "Puerto Rico" : "PR",
+    "Rhode Island" : "RI",
+    "South Carolina" : "SC",
+    "South Dakota" : "SD",
+    "Tennessee" : "TN",
+    "Texas" : "TX",
+    "Trust Territories" : "TT",
+    "Utah" : "UT",
+    "Vermont" : "VT",
+    "Virginia" : "VA",
+    "Virgin Islands" : "VI",
+    "Washington" : "WA",
+    "West Virginia" : "WV",
+    "Wisconsin" : "WI",
+    "Wyoming" : "WY"
 }
