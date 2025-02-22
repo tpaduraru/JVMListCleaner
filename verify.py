@@ -40,7 +40,6 @@ def verify(jl):
                     updated_value, error = proper_name(value, 'city')
                 elif header == "State":
                     updated_value, error = format_state(value)
-                    print(f'Original State: {value}\nUpdated State: {updated_value}')
                 elif header == "Zip Code":
                     updated_value = format_zip(value)
                 elif header == "County":
@@ -92,28 +91,23 @@ def proper_name(name, type):
     out = re.sub(r"(?<!\w)(mc)(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)# capitalizes McXxxx
     out = re.sub(r"(?<!\w)(o')(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)# capitalizes O'Xxxx
     out = re.sub(r"-(\w)", lambda m: '-' + m.group(1).capitalize(), out, flags=re.IGNORECASE)# capitalizes Un-Loved
-
     if re.search(r"[,\.]", out) or 0 < len(out) <= 2 : error += 'Verify ' + type # warning to check field
     if re.search(r"[\(\)]", out): # if contains '(' or ')'
         error += 'Removed (' + re.findall(r"\((.*?)\)", out)[0] + ') from ' + type # mentions removed contents in error
         out = re.sub(r"\(.*?\)", "", out) # removes everythin from in between
-
     if type == 'fname':
         if re.fullmatch(r"[a-zA-Z]\.[a-zA-Z]\.", out): 
             out = out.upper() # If its 'c.j.'
-    
     if type in { 'fname', 'lname' } and name.lower():
         for s in name.lower().split():
             if s in { 'the', 'team', 'group', 'true'}:
                 error += 'Invalid '+ type
                 break
-
     return out, error
 
 def valid_email(email):
     error = ''
     out = email
-
     if not out:
         error += 'Missing email'
     elif not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
@@ -138,15 +132,11 @@ def format_street(address):
 
 def format_state(state):
     error = None
-
     if state.upper() in state_abbreviations.values():
         return state.upper(), error
-    
     updated_value = state_abbreviations.get(state.title())
-
     if not updated_value:
         error = 'Invalid state'
-    
     return updated_value, error
 
 def format_zip(zip):
