@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import filedialog
-import os
 from tkinter import ttk
+import os
+import configparser
 from map import map
 from verify import verify
 from jvmlist import JVMList
