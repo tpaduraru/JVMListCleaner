@@ -43,7 +43,7 @@ def verify(jl):
                 elif header == "Zip Code":
                     updated_value = format_zip(value)
                 elif header == "County":
-                    updated_value, error = proper_name(value)
+                    updated_value, error = proper_name(value, 'county')
 
                 if error:
                     error_msg += error + ', '
