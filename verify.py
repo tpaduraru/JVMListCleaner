@@ -27,9 +27,9 @@ def verify(jl):
                 updated_value = value # just in case it's perfect
                 error = None
                 if header == "First Name":
-                    updated_value, error = proper_name(value, 'fname')
+                    updated_value, error = proper_name(value, 'firstname')
                 elif header == "Last Name":
-                    updated_value, error = proper_name(value, 'lname')
+                    updated_value, error = proper_name(value, 'lastname')
                 elif header == "Email":
                     updated_value, error = valid_email(value)
                 elif header == "Phone":
@@ -58,10 +58,10 @@ def verify(jl):
             # Track the number of successesful and error rows
             if row_be_good:
                 jl.successful_rows += 1
-                print(f'Row {jl.read_rows} read successfully')
+                print(f'Row {jl.successful_rows + jl.error_rows} read successfully')
             else:
                 jl.error_rows += 1
-                print(f"Row {jl.read_rows} failed formatting: {error_msg}") # Temporary fstring printout until implementation of errors.py 
+                print(f"Row {jl.successful_rows + jl.error_rows} failed formatting: {error_msg}") # Temporary fstring printout until implementation of errors.py 
                 print(f"Invalid Row: {row}")
 
     input_file_path_str = jl.input_file_path.get()
@@ -91,18 +91,24 @@ def proper_name(name, type):
     out = re.sub(r"(?<!\w)(mc)(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)# capitalizes McXxxx
     out = re.sub(r"(?<!\w)(o')(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)# capitalizes O'Xxxx
     out = re.sub(r"-(\w)", lambda m: '-' + m.group(1).capitalize(), out, flags=re.IGNORECASE)# capitalizes Un-Loved
-    if re.search(r"[,\.]", out) or 0 < len(out) <= 2 : error += 'Verify ' + type # warning to check field
+    #if re.search(r"[,\.]", out) or 0 < len(out) <= 2 : error += 'Verify ' + type # warning to check field
     if re.search(r"[\(\)]", out): # if contains '(' or ')'
         error += 'Removed (' + re.findall(r"\((.*?)\)", out)[0] + ') from ' + type # mentions removed contents in error
         out = re.sub(r"\(.*?\)", "", out) # removes everythin from in between
-    if type == 'fname':
-        if re.fullmatch(r"[a-zA-Z]\.[a-zA-Z]\.", out): 
-            out = out.upper() # If its 'c.j.'
-    if type in { 'fname', 'lname' } and name.lower():
+    if type in { 'firstname', 'lastname' } and name.lower():
         for s in name.lower().split():
             if s in { 'the', 'team', 'group', 'true'}:
                 error += 'Invalid '+ type
                 break
+    if type == 'firstname':
+        if re.fullmatch(r"[a-zA-Z]\.[a-zA-Z]\.", out): 
+            out = out.upper() # If its 'c.j.'
+        if len(re.sub(r"[^a-zA-Z]", "", name)) <= 2:
+            error += 'Verify ' + type
+    if type == 'lastname':
+        out = re.sub(r"\s(ii|iii|iv|jr|sr)", '', out, flags=re.IGNORECASE) # remove suffix
+        out = re.sub(r"[,\.]", '', out).trim() # remove dumb punctuation
+    
     return out, error
 
 def valid_email(email):
@@ -110,9 +116,10 @@ def valid_email(email):
     out = email
     if not out:
         error += 'Missing email'
+    elif ';' in email:
+        error += 'Invalid email'
     elif not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
         error += 'Invalid email'
-
     return out, error
 
 def valid_phone(phone):
