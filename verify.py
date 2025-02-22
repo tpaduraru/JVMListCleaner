@@ -31,7 +31,7 @@ def verify(jl):
                 elif header == "Last Name":
                     updated_value, error = proper_name(value, 'lname')
                 elif header == "Email":
-                    updated_value = valid_email(value)
+                    updated_value, error = valid_email(value)
                 elif header == "Phone":
                     updated_value, error = valid_phone(value)
                 elif header == "Street Address":
@@ -40,6 +40,7 @@ def verify(jl):
                     updated_value, error = proper_name(value, 'city')
                 elif header == "State":
                     updated_value, error = format_state(value)
+                    print(f'Original State: {value}\nUpdated State: {updated_value}')
                 elif header == "Zip Code":
                     updated_value = format_zip(value)
                 elif header == "County":
@@ -48,6 +49,7 @@ def verify(jl):
                 if error:
                     error_msg += error + ', '
                     row_be_good = False
+                
                 updated_row[column] = updated_value
 
             updated_row["Errors"] = error_msg.strip(", ") if not row_be_good else ""
@@ -57,6 +59,7 @@ def verify(jl):
             # Track the number of successesful and error rows
             if row_be_good:
                 jl.successful_rows += 1
+                print(f'Row {jl.read_rows} read successfully')
             else:
                 jl.error_rows += 1
                 print(f"Row {jl.read_rows} failed formatting: {error_msg}") # Temporary fstring printout until implementation of errors.py 
@@ -104,11 +107,19 @@ def proper_name(name, type):
             if s in { 'the', 'team', 'group', 'true'}:
                 error += 'Invalid '+ type
                 break
-            
+
     return out, error
 
 def valid_email(email):
-    return bool(re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email)) 
+    error = ''
+    out = email
+
+    if not out:
+        error += 'Missing email'
+    elif not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
+        error += 'Invalid email'
+
+    return out, error
 
 def valid_phone(phone):
     error = None
@@ -127,14 +138,16 @@ def format_street(address):
 
 def format_state(state):
     error = None
+
     if state.upper() in state_abbreviations.values():
         return state.upper(), error
     
-    updated_value = state_abbreviations.get(state.title(), "")
-    if updated_value == "":
-        error = 'Invalid state', 
+    updated_value = state_abbreviations.get(state.title())
+
+    if not updated_value:
+        error = 'Invalid state'
     
-    return state, error
+    return updated_value, error
 
 def format_zip(zip):
     zip = re.sub(r"\D", "", zip)  
@@ -142,61 +155,56 @@ def format_zip(zip):
 
 
 state_abbreviations = {
-    "Alabama" : "AL",
-    "Alaska" : "AK",
-    "Arizona" : "AZ",
-    "Arkansas" : "AR",
-    "American Samoa" : "AS",
-    "California" : "CA",
-    "Colorado" : "CO",
-    "Connecticut" : "CT",
-    "Delaware" : "DE",
-    "District of Columbia" : "DC",
-    "Florida" : "FL",
-    "Georgia" : "GA",
-    "Guam" : "GU",
-    "Hawaii" : "HI",
-    "Idaho" : "ID",
-    "Illinois" : "IL",
-    "Indiana" : "IN",
-    "Iowa" : "IA",
-    "Kansas" : "KS",
-    "Kentucky" : "KY",
-    "Louisiana" : "LA",
-    "Maine" : "ME",
-    "Maryland" : "MD",
-    "Massachusetts" : "MA",
-    "Michigan" : "MI",
-    "Minnesota" : "MN",
-    "Mississippi" : "MS",
-    "Missouri" : "MO",
-    "Montana" : "MT",
-    "Nebraska" : "NE",
-    "Nevada" : "NV",
-    "New Hampshire" : "NH",
-    "Kentucky" : "KY",
-    "Louisiana" : "LA",
-    "Maine" : "ME",
-    "Maryland" : "MD",
-    "Massachusetts" : "MA",
-    "Michigan" : "MI",
-    "Ohio" : "OH",
-    "Oklahoma" : "OK",
-    "Oregon" : "OR",
-    "Pennsylvania" : "PA",
-    "Puerto Rico" : "PR",
-    "Rhode Island" : "RI",
-    "South Carolina" : "SC",
-    "South Dakota" : "SD",
-    "Tennessee" : "TN",
-    "Texas" : "TX",
-    "Trust Territories" : "TT",
-    "Utah" : "UT",
-    "Vermont" : "VT",
-    "Virginia" : "VA",
-    "Virgin Islands" : "VI",
-    "Washington" : "WA",
-    "West Virginia" : "WV",
-    "Wisconsin" : "WI",
-    "Wyoming" : "WY"
+    "Alabama": "AL",
+    "Alaska": "AK",
+    "Arizona": "AZ",
+    "Arkansas": "AR",
+    "American Samoa": "AS",
+    "California": "CA",
+    "Colorado": "CO",
+    "Connecticut": "CT",
+    "Delaware": "DE",
+    "District Of Columbia": "DC",
+    "Florida": "FL",
+    "Georgia": "GA",
+    "Guam": "GU",
+    "Hawaii": "HI",
+    "Idaho": "ID",
+    "Illinois": "IL",
+    "Indiana": "IN",
+    "Iowa": "IA",
+    "Kansas": "KS",
+    "Kentucky": "KY",
+    "Louisiana": "LA",
+    "Maine": "ME",
+    "Maryland": "MD",
+    "Massachusetts": "MA",
+    "Michigan": "MI",
+    "Minnesota": "MN",
+    "Mississippi": "MS",
+    "Missouri": "MO",
+    "Montana": "MT",
+    "Nebraska": "NE",
+    "Nevada": "NV",
+    "New Hampshire": "NH",
+    "Ohio": "OH",
+    "Oklahoma": "OK",
+    "Oregon": "OR",
+    "Pennsylvania": "PA",
+    "Puerto Rico": "PR",
+    "Rhode Island": "RI",
+    "South Carolina": "SC",
+    "South Dakota": "SD",
+    "Tennessee": "TN",
+    "Texas": "TX",
+    "Trust Territories": "TT",
+    "Utah": "UT",
+    "Vermont": "VT",
+    "Virginia": "VA",
+    "Virgin Islands": "VI",
+    "Washington": "WA",
+    "West Virginia": "WV",
+    "Wisconsin": "WI",
+    "Wyoming": "WY",
 }
+
