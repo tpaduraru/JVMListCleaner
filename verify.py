@@ -19,30 +19,31 @@ def verify(jl):
             row_be_good = True  # Assume row is valid until proven otherwise
             error_msg = ""
 
-            for field, column in jl.field_dict.items():
-                if column not in headers:
-                    continue
+            for header, column in jl.field_dict.items():
+                if column not in headers: continue
+                if not row[column]: continue
 
+                updated_value = ''
                 value = row[column].strip()
-                if field == "First Name":
+                if header == "First Name":
                     updated_value = proper_name(value)
-                elif field == "Last Name":
+                elif header == "Last Name":
                     updated_value = proper_name(value)
-                elif field == "Email":
+                elif header == "Email":
                     updated_value = value if valid_email(value) else ""
                     if updated_value == "":
                         row_be_good = False
                         error_msg += 'Invalid email, '
-                elif field == "Phone":
-                    updated_value = valid_phone(value) or ""
-                    if updated_value == "":
+                elif header == "Phone":
+                    updated_value = valid_phone(value)
+                    if bool(re.search(r'[^0-9]', updated_value)):
                         row_be_good = False
                         error_msg += 'Invalid phone, '
-                elif field == "Street Address":
+                elif header == "Street Address":
                     updated_value = format_street(value)
-                elif field == "City":
+                elif header == "City":
                     updated_value = proper_name(value)
-                elif field == "State":
+                elif header == "State":
                     if value.upper() in state_abbreviations.values():
                         updated_value = value.upper()
                     else:
@@ -50,9 +51,9 @@ def verify(jl):
                         if updated_value == "":
                             row_be_good = False
                             error_msg += 'Invalid state, '
-                elif field == "Zip Code":
+                elif header == "Zip Code":
                     updated_value = format_zip(value)
-                elif field == "County":
+                elif header == "County":
                     updated_value = proper_name(value)
                 else:
                     updated_value = value  # No change if the field is unrecognized
@@ -110,7 +111,7 @@ def format_street(address):
     out = re.sub(r"(?<!\w)(mc)(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)# capitalizes McXxxx
     out = re.sub(r"(?<!\w)(o')(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)# capitalizes O'Xxxx
     out = re.sub(r"(?<!\w)(#)(\w)", lambda m: m.group(1).capitalize() + m.group(2).upper(), out, flags=re.IGNORECASE)# capitalizes #A33
-    out = re.sub(r"(\s[ns][ew]\s)", lambda m: m.group(1).upper(), out, flags=re.IGNORECASE)# capitalizes NE,NW,SE,SW
+    out = re.sub(r"(\s[ns][ew]\b)", lambda m: m.group(1).upper(), out, flags=re.IGNORECASE)# capitalizes NE,NW,SE,SW
     return out
 
 def format_zip(zip):
