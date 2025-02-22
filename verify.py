@@ -23,41 +23,31 @@ def verify(jl):
                 if column not in headers: continue
                 if not row[column]: continue
 
-                updated_value = ''
                 value = row[column].strip()
+                updated_value = value # just in case it's perfect
+                error = None
                 if header == "First Name":
-                    updated_value = proper_name(value)
+                    updated_value = proper_name(value, 'fname')
                 elif header == "Last Name":
-                    updated_value = proper_name(value)
+                    updated_value = proper_name(value, 'lname')
                 elif header == "Email":
-                    updated_value = value if valid_email(value) else ""
-                    if updated_value == "":
-                        row_be_good = False
-                        error_msg += 'Invalid email, '
+                    updated_value = valid_email(value)
                 elif header == "Phone":
-                    updated_value = valid_phone(value)
-                    if bool(re.search(r'[^0-9]', updated_value)):
-                        row_be_good = False
-                        error_msg += 'Invalid phone, '
+                    updated_value, error = valid_phone(value)
                 elif header == "Street Address":
                     updated_value = format_street(value)
                 elif header == "City":
-                    updated_value = proper_name(value)
+                    updated_value = proper_name(value, 'city')
                 elif header == "State":
-                    if value.upper() in state_abbreviations.values():
-                        updated_value = value.upper()
-                    else:
-                        updated_value = state_abbreviations.get(value.title(), "")
-                        if updated_value == "":
-                            row_be_good = False
-                            error_msg += 'Invalid state, '
+                    updated_value, error = format_state(value)
                 elif header == "Zip Code":
                     updated_value = format_zip(value)
                 elif header == "County":
-                    updated_value = proper_name(value)
-                else:
-                    updated_value = value  # No change if the field is unrecognized
+                    updated_value, error = proper_name(value)
 
+                if error:
+                    error_msg += error + ', '
+                    row_be_good = False
                 updated_row[column] = updated_value
 
             updated_row["Errors"] = error_msg.strip(", ") if not row_be_good else ""
@@ -93,18 +83,24 @@ def verify(jl):
 
 
 
-def proper_name(name):
+def proper_name(name, type):
     out =" ".join(word.capitalize() for word in name.split()) # capitalizes each word
     out = re.sub(r"(?<!\w)(mc)(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)# capitalizes McXxxx
     out = re.sub(r"(?<!\w)(')(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)# capitalizes O'Xxxx
+    if type == 'fname' and re.fullmatch(r"[a-zA-Z]\.[a-zA-Z]\.", name):
+        out = name.upper()
+        re.fullmatch
     return out
 
 def valid_email(email):
     return bool(re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email)) 
 
 def valid_phone(phone):
+    error = None
     phone = re.sub("[^0-9]", "", phone) 
-    return phone
+    if re.search(r'[^0-9]', phone) or len(phone) < 10 or len(phone) > 11:
+        error = 'Invalid phone'
+    return phone, error
 
 def format_street(address):
     out =" ".join(word.capitalize() for word in address.split()) # capitalizes each word
@@ -113,6 +109,17 @@ def format_street(address):
     out = re.sub(r"(?<!\w)(#)(\w)", lambda m: m.group(1).capitalize() + m.group(2).upper(), out, flags=re.IGNORECASE)# capitalizes #A33
     out = re.sub(r"(\s[ns][ew]\b)", lambda m: m.group(1).upper(), out, flags=re.IGNORECASE)# capitalizes NE,NW,SE,SW
     return out
+
+def format_state(state):
+    error = None
+    if state.upper() in state_abbreviations.values():
+        return state.upper(), error
+    
+    updated_value = state_abbreviations.get(state.title(), "")
+    if updated_value == "":
+        error = 'Invalid state', 
+    
+    return state, error
 
 def format_zip(zip):
     zip = re.sub(r"\D", "", zip)  
