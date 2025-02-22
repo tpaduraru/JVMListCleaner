@@ -27,9 +27,9 @@ def verify(jl):
                 updated_value = value # just in case it's perfect
                 error = None
                 if header == "First Name":
-                    updated_value = proper_name(value, 'fname')
+                    updated_value, error = proper_name(value, 'fname')
                 elif header == "Last Name":
-                    updated_value = proper_name(value, 'lname')
+                    updated_value, error = proper_name(value, 'lname')
                 elif header == "Email":
                     updated_value = valid_email(value)
                 elif header == "Phone":
@@ -37,7 +37,7 @@ def verify(jl):
                 elif header == "Street Address":
                     updated_value = format_street(value)
                 elif header == "City":
-                    updated_value = proper_name(value, 'city')
+                    updated_value, error = proper_name(value, 'city')
                 elif header == "State":
                     updated_value, error = format_state(value)
                 elif header == "Zip Code":
@@ -84,13 +84,18 @@ def verify(jl):
 
 
 def proper_name(name, type):
+    error = None
     out =" ".join(word.capitalize() for word in name.split()) # capitalizes each word
     out = re.sub(r"(?<!\w)(mc)(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)# capitalizes McXxxx
     out = re.sub(r"(?<!\w)(')(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)# capitalizes O'Xxxx
     if type == 'fname' and re.fullmatch(r"[a-zA-Z]\.[a-zA-Z]\.", name):
         out = name.upper()
-        re.fullmatch
-    return out
+    if type in { 'fname', 'lname' } and name.lower():
+        for s in name.lower().split():
+            if s in { 'the', 'team', 'group', 'true'}:
+                error = 'Invalid '+ type
+                break
+    return out, error
 
 def valid_email(email):
     return bool(re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email)) 
