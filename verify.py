@@ -68,7 +68,7 @@ def verify(jl):
             else:
                 jl.error_rows += 1
                 print(f"Row {jl.successful_rows + jl.error_rows} failed formatting: {error_msg}") # Temporary fstring printout until implementation of errors.py 
-                
+
 
     input_file_path_str = jl.input_file_path.get()
     output_file = input_file_path_str.replace(".csv", "_output.csv")
@@ -112,7 +112,7 @@ def proper_name(name, type):
         if len(re.sub(r"[^a-zA-Z]", "", name)) <= 2:
             error += 'Verify ' + type
     if type == 'lastname':
-        out = re.sub(r"\s(ii|iii|iv|jr|sr)", '', out, flags=re.IGNORECASE) # remove suffix
+        out = re.sub(r"\s(iii|ii|iv|jr|sr)", '', out, flags=re.IGNORECASE) # remove suffix
         out = re.sub(r"[,\.]", '', out) # remove dumb punctuation
     
     return out, error
