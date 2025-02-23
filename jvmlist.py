@@ -32,7 +32,7 @@ class JVMDb:
     id_db = {} # email is the key to return the id
     owner_db = {} # email is the key to return the owner
     new_ids = {}
-    new_owners = []
+    new_owners = [] 
 
     def __init__(self):
         self.file_path = '../../test/test_email_db.csv'
