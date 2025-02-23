@@ -10,6 +10,10 @@ jl = JVMList()
 
 def select_files():
     file_names = filedialog.askopenfilenames(filetypes=[("CSV Files", "*.csv")])
+    jl.read_rows = 0
+    jl.successful_rows = 0
+    jl.error_rows = 0
+    
     if file_names:
         input_file_path_var.set(file_names[0])
         jl.input_file_path = file_names[0]
@@ -17,16 +21,16 @@ def select_files():
         input_file_label_var.set(file_name_short)
         jl.input_file_path = input_file_path_var
 
-        jl.read_rows = 0
-        jl.successful_rows = 0
-        jl.error_rows = 0
-
         jl.row_count_str.set(jl.read_rows)
         jl.successful_rows_str.set(jl.successful_rows)
         jl.error_count_str.set(jl.error_rows)
+        map_button.config(state=tk.NORMAL)
+        verify_button.config(state=tk.NORMAL)
     else:
         input_file_path_var.set("") 
         input_file_label_var.set("No files selected")
+        map_button.config(state=tk.DISABLED)
+        verify_button.config(state=tk.DISABLED)
 
 
 def update_field_dict(event):
@@ -63,12 +67,12 @@ input_file_label.pack(anchor="w", padx=40, pady=5)
 
 
 # Map Button
-map_button = tk.Button(jl.root, text='Map', command=lambda: map(jl))
+map_button = tk.Button(jl.root, text='Map', state=tk.DISABLED, command=lambda: map(jl))
 map_button.pack(anchor="w", padx=20, pady=20)
 
 
 # Verify Button
-verify_button = tk.Button(jl.root, text='Clean File', command=lambda: verify(jl))
+verify_button = tk.Button(jl.root, text='Clean File', state=tk.DISABLED, command=lambda: verify(jl))
 verify_button.place(x=250, y=375)
 
 
