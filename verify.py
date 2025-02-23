@@ -107,7 +107,7 @@ def proper_name(name, type):
             error += 'Verify ' + type
     if type == 'lastname':
         out = re.sub(r"\s(ii|iii|iv|jr|sr)", '', out, flags=re.IGNORECASE) # remove suffix
-        out = re.sub(r"[,\.]", '', out).trim() # remove dumb punctuation
+        out = re.sub(r"[,\.]", '', out) # remove dumb punctuation
     
     return out, error
 
