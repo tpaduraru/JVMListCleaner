@@ -2,11 +2,14 @@ import csv
 import re
 import tkinter as tk
 from jvmlist import JVMList
+from jvmlist import JVMDb
+
 
 # general proper function def verify(file_path, field_dict, jl):
 def verify(jl):
     updated_rows = [] # initialized list all
-
+    db = JVMDb()
+    
     with open(jl.input_file_path.get(), "r", newline="", encoding='utf-8') as csvfile:
         reader = list(csv.DictReader(csvfile))
         headers = list(reader[0].keys())
@@ -32,6 +35,9 @@ def verify(jl):
                     updated_value, error = proper_name(value, 'lastname')
                 elif header == "Email":
                     updated_value, error = valid_email(value)
+                    if not error:
+                        print(db.get_id(value))
+                        print(db.get_owner(value))
                 elif header == "Phone":
                     updated_value, error = valid_phone(value)
                 elif header == "Street Address":
@@ -62,7 +68,7 @@ def verify(jl):
             else:
                 jl.error_rows += 1
                 print(f"Row {jl.successful_rows + jl.error_rows} failed formatting: {error_msg}") # Temporary fstring printout until implementation of errors.py 
-                print(f"Invalid Row: {row}")
+                
 
     input_file_path_str = jl.input_file_path.get()
     output_file = input_file_path_str.replace(".csv", "_output.csv")
@@ -107,7 +113,7 @@ def proper_name(name, type):
             error += 'Verify ' + type
     if type == 'lastname':
         out = re.sub(r"\s(ii|iii|iv|jr|sr)", '', out, flags=re.IGNORECASE) # remove suffix
-        out = re.sub(r"[,\.]", '', out).trim() # remove dumb punctuation
+        out = re.sub(r"[,\.]", '', out) # remove dumb punctuation
     
     return out, error
 
@@ -149,6 +155,9 @@ def format_state(state):
 def format_zip(zip):
     zip = re.sub(r"\D", "", zip)  
     return zip[:5]
+
+
+
 
 
 state_abbreviations = {
