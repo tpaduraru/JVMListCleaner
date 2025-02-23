@@ -17,7 +17,7 @@ def verify(jl):
         for row in reader:
             updated_row = row.copy()
             row_be_good = True  # Assume row is valid until proven otherwise
-            error_msg = ""
+            error_msg = "" # msgs for whole row
 
             for header, column in jl.field_dict.items():
                 if column not in headers: continue
@@ -77,13 +77,6 @@ def verify(jl):
     print(f"File saved in: {output_file}")
     print(f"Rows read: {jl.read_rows}, Successful rows: {jl.successful_rows}, Errors: {jl.error_rows}") # temp until we print out in errors.py
 
-    jl.row_count_str.set(jl.read_rows)
-    jl.successful_rows_str.set(jl.successful_rows)
-    jl.error_count_str.set(jl.error_rows)
-    print(f"File saved in: {output_file}")
-    print(f"Rows read: {jl.read_rows}, Successful rows: {jl.successful_rows}, Errors: {jl.error_rows}") # temp until we print out in errors.py
-
-
 
 def proper_name(name, type):
     error = ''
@@ -95,12 +88,13 @@ def proper_name(name, type):
     if re.search(r"[\(\)]", out): # if contains '(' or ')'
         error += 'Removed (' + re.findall(r"\((.*?)\)", out)[0] + ') from ' + type # mentions removed contents in error
         out = re.sub(r"\(.*?\)", "", out) # removes everythin from in between
-    if type in { 'firstname', 'lastname' } and name.lower():
-        for s in name.lower().split():
-            if s in { 'the', 'team', 'group', 'true'}:
+    if type in { 'firstname', 'lastname' }:
+        for word in name.lower().split():
+            if word in { 'the', 'team', 'group', 'true'}:
                 error += 'Invalid '+ type
                 break
     if type == 'firstname':
+        # to do: check if first name is like mr or dr or w/e
         if re.fullmatch(r"[a-zA-Z]\.[a-zA-Z]\.", out): 
             out = out.upper() # If its 'c.j.'
         if len(re.sub(r"[^a-zA-Z]", "", name)) <= 2:
@@ -108,7 +102,6 @@ def proper_name(name, type):
     if type == 'lastname':
         out = re.sub(r"\s(iii|ii|iv|jr|sr)", '', out, flags=re.IGNORECASE) # remove suffix
         out = re.sub(r"[,\.]", '', out) # remove dumb punctuation
-    
     return out, error
 
 def valid_email(email):
