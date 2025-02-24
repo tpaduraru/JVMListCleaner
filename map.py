@@ -71,9 +71,11 @@ def map(jl):
         'Ratebreak'
     ]
 
+    jl.list_type_value.set('')
     for k in file_type_keywords:
         if k in file_name_split:
             jl.list_type_value.set(k)
+            break;
 
     jl.row_count_str.set(jl.read_rows)
         
