@@ -60,6 +60,9 @@ def map(jl):
                 jl.dropdown_options[idx].set(header) 
                 jl.field_dict[jl.fields[idx]] = header
                 break
+    
+    # Find type from filename jl.input_file_path
+    print(jl.input_file_path.get())
 
     jl.row_count_str.set(jl.read_rows)
         

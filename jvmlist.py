@@ -21,6 +21,7 @@ class JVMList:
     successful_rows_str = None
     error_count = None
     error_count_str = None
-    list_date_value = datetime.today().strftime('%m/%d/%y')
+    list_date_value = None
     list_type_value = None
+    list_date_value_default = datetime.today().strftime('%m/%d/%y')
     list_type_options = ['SPCP', 'FTHB', 'Homerun', 'Stale', 'Ratebreak']

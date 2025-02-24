@@ -11,8 +11,9 @@ def verify(jl):
         reader = list(csv.DictReader(csvfile))
         headers = list(reader[0].keys())
         
-        if "Errors" not in headers:
-            headers.append("Errors")
+        if "Errors" not in headers: headers.append("Errors")
+        if "Marketing List Type" not in headers: headers.append("Marketing List Type")
+        if "Marketing List Date" not in headers: headers.append("Marketing List Date")
         
         for row in reader:
             updated_row = row.copy()
@@ -52,6 +53,8 @@ def verify(jl):
                 updated_row[column] = updated_value
 
             updated_row["Errors"] = error_msg.strip(", ") if not row_be_good else ""
+            updated_row["Marketing List Type"] = jl.list_type_value.get()
+            updated_row["Marketing List Date"] = jl.list_date_value
         
             updated_rows.append(updated_row)
 
