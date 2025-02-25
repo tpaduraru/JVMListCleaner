@@ -12,14 +12,17 @@ def verify(jl):
 
 
         required_columns = ["Listing Price", "Loan Amount", "Credit Amount", "Errors", 
-                            "Marketing List Date", "Marketing List Type"]
+                            "ContactId", "Owner Name", "OwnerId", "BDO Owner", "Contact Owner", 
+                            "RecordTypeId", "Type", "Lead Source", "Marketing List Date", "Marketing List Type"]
+        
         for col in required_columns:
             if col not in headers:
                 headers.append(col)
 
         header_order = ["Email", "Phone", "Street Address", "City", "State", "Zip Code", "County",
                         "Listing Price", "Loan Amount", "Credit Amount", "First Name", "Last Name", "Errors", 
-                        "Marketing List Date", "Marketing List Type"]
+                        "ContactId", "Owner Name", "OwnerId", "BDO Owner", "Contact Owner", 
+                        "RecordTypeId", "Type", "Lead Source", "Marketing List Date", "Marketing List Type"]
 
         updated_headers = {
             "Email": "Email",
@@ -35,8 +38,16 @@ def verify(jl):
             "First Name": "FirstName",
             "Last Name": "LastName",
             "Errors": "Errors",
-            "Marketing List Date": "Marketing List Date", 
-            "Marketing List Type": "Marketing List Type"
+            "ContactId": "ContactId",
+            "Owner Name": "Owner Name",
+            "OwnerId": "OwnerId",
+            "BDO Owner": "BDO Owner",
+            "Contact Owner": "Contact Owner",
+            "RecordTypeId": "RecordTypeId",
+            "Type": "Type",
+            "Lead Source": "Lead Source",
+            "Marketing List Date": "Marketing List Date",
+            "Marketing List Type": "Marketing List Type",
         }
 
        
