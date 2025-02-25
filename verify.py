@@ -11,15 +11,17 @@ def verify(jl):
         headers = list(reader[0].keys())
 
 
-        required_columns = ["Listing Price", "Loan Amount", "Credit Amount", "Errors", 
-                            "Marketing List Date", "Marketing List Type"]
+        required_columns = ["Errors", "ContactId", "Owner Name", "OwnerId", "BDO Owner", "Contact Owner", 
+                            "RecordTypeId", "Type", "Lead Source", "Marketing List Date", "Marketing List Type"]
+        
         for col in required_columns:
             if col not in headers:
                 headers.append(col)
 
         header_order = ["Email", "Phone", "Street Address", "City", "State", "Zip Code", "County",
                         "Listing Price", "Loan Amount", "Credit Amount", "First Name", "Last Name", "Errors", 
-                        "Marketing List Date", "Marketing List Type"]
+                        "ContactId", "Owner Name", "OwnerId", "BDO Owner", "Contact Owner", 
+                        "RecordTypeId", "Type", "Lead Source", "Marketing List Date", "Marketing List Type"]
 
         updated_headers = {
             "Email": "Email",
@@ -35,8 +37,16 @@ def verify(jl):
             "First Name": "FirstName",
             "Last Name": "LastName",
             "Errors": "Errors",
-            "Marketing List Date": "Marketing List Date", 
-            "Marketing List Type": "Marketing List Type"
+            "ContactId": "ContactId",
+            "Owner Name": "Owner Name",
+            "OwnerId": "OwnerId",
+            "BDO Owner": "BDO Owner",
+            "Contact Owner": "Contact Owner",
+            "RecordTypeId": "RecordTypeId",
+            "Type": "Type",
+            "Lead Source": "Lead Source",
+            "Marketing List Date": "Marketing List Date",
+            "Marketing List Type": "Marketing List Type",
         }
 
        
@@ -56,9 +66,9 @@ def verify(jl):
                 error = None
 
                 if header == "First Name":
-                    updated_value, error = proper_name(value, 'firstname')
+                    updated_value, error = proper_name(value, 'first_name')
                 elif header == "Last Name":
-                    updated_value, error = proper_name(value, 'lastname')
+                    updated_value, error = proper_name(value, 'last_name')
                 elif header == "Email":
                     updated_value, error = valid_email(value)
                 elif header == "Phone":
@@ -74,11 +84,11 @@ def verify(jl):
                 elif header == "County":
                     updated_value, error = proper_name(value, 'county')
                 elif header == "Listing Price":
-                    updated_value, error = format_dollars(value, 'listing')#re.sub("[^0-9]", "", value)
+                    updated_value, error = format_dollars(value, 'listing_price')#re.sub("[^0-9]", "", value)
                 elif header == "Loan Amount":
-                    updated_value, error = format_dollars(value, 'listing')#re.sub("[^0-9]", "", value)
+                    updated_value, error = format_dollars(value, 'loan_amount')#re.sub("[^0-9]", "", value)
                 elif header == "Credit Amount":
-                    updated_value, error = format_dollars(value, 'listing')#re.sub("[^0-9]", "", value)
+                    updated_value, error = format_dollars(value, 'credit_amount')#re.sub("[^0-9]", "", value)
 
                 if error:
                     error_msg += error + ', '
@@ -87,6 +97,14 @@ def verify(jl):
                 updated_row[updated_headers[header]] = updated_value
 
             updated_row["Errors"] = error_msg.strip(", ") if not row_be_good else ""
+            # updated_row["ContactId"] = '' #to do
+            # updated_row["Owner Name"] = '' #to do
+            # updated_row["OwnerId"] = '' #to do
+            # updated_row["BDO Owner"] = '' #to do
+            # updated_row["Contact Owner"] = '' #to do
+            updated_row["RecordTypeId"] = '0013l00002X71zdAAB'
+            updated_row["Type"] = 'Realtor'
+            updated_row["Lead Source"] = 'MLS'
             updated_row["Marketing List Type"] = jl.list_type_value.get()
             updated_row["Marketing List Date"] = jl.list_date_value
         
@@ -174,10 +192,13 @@ def format_zip(zip):
 
 def format_dollars(dollars, type):
     error = None
-    dollars = re.sub(r"[^0-9]", "", dollars)
+    out = None
+    dollars = int(re.sub(r"[^0-9]", "", dollars))
     if not dollars:
         error = 'Missing ' + type
-    return dollars, error
+        return dollars, error
+    out = f"${dollars:,}"
+    return out, error
 
 state_abbreviations = {
     "Alabama": "AL",
