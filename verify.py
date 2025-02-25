@@ -66,9 +66,9 @@ def verify(jl):
                 error = None
 
                 if header == "First Name":
-                    updated_value, error = proper_name(value, 'firstname')
+                    updated_value, error = proper_name(value, 'first_name')
                 elif header == "Last Name":
-                    updated_value, error = proper_name(value, 'lastname')
+                    updated_value, error = proper_name(value, 'last_name')
                 elif header == "Email":
                     updated_value, error = valid_email(value)
                 elif header == "Phone":
@@ -84,11 +84,11 @@ def verify(jl):
                 elif header == "County":
                     updated_value, error = proper_name(value, 'county')
                 elif header == "Listing Price":
-                    updated_value, error = format_dollars(value, 'listing')#re.sub("[^0-9]", "", value)
+                    updated_value, error = format_dollars(value, 'listing_price')#re.sub("[^0-9]", "", value)
                 elif header == "Loan Amount":
-                    updated_value, error = format_dollars(value, 'listing')#re.sub("[^0-9]", "", value)
+                    updated_value, error = format_dollars(value, 'loan_amount')#re.sub("[^0-9]", "", value)
                 elif header == "Credit Amount":
-                    updated_value, error = format_dollars(value, 'listing')#re.sub("[^0-9]", "", value)
+                    updated_value, error = format_dollars(value, 'credit_amount')#re.sub("[^0-9]", "", value)
 
                 if error:
                     error_msg += error + ', '
@@ -192,10 +192,13 @@ def format_zip(zip):
 
 def format_dollars(dollars, type):
     error = None
-    dollars = re.sub(r"[^0-9]", "", dollars)
+    out = None
+    dollars = int(re.sub(r"[^0-9]", "", dollars))
     if not dollars:
         error = 'Missing ' + type
-    return dollars, error
+        return dollars, error
+    out = f"${dollars:,}"
+    return out, error
 
 state_abbreviations = {
     "Alabama": "AL",
