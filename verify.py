@@ -2,10 +2,13 @@ import csv
 import re
 import tkinter as tk
 from jvmlist import JVMList
+from jvmlist import JVMDb
+
 
 def verify(jl):
     updated_rows = []
-
+    db = JVMDb()
+    
     with open(jl.input_file_path.get(), "r", newline="", encoding='utf-8') as csvfile:
         reader = list(csv.DictReader(csvfile))
         headers = list(reader[0].keys())
@@ -71,6 +74,9 @@ def verify(jl):
                     updated_value, error = proper_name(value, 'last_name')
                 elif header == "Email":
                     updated_value, error = valid_email(value)
+                    if not error:
+                        print(db.get_id(value))
+                        print(db.get_owner(value))
                 elif header == "Phone":
                     updated_value, error = valid_phone(value)
                 elif header == "Street Address":
@@ -152,9 +158,9 @@ def proper_name(name, type):
     if type == 'firstname' and len(re.sub(r"[^a-zA-Z]", "", name)) <= 2:
         error += 'Verify ' + type
     if type == 'lastname':
-        out = re.sub(r"\s(iii|ii|iv|jr|sr)", '', out, flags=re.IGNORECASE)  
-        out = re.sub(r"[,\.]", '', out)
 
+        out = re.sub(r"\s(iii|ii|iv|jr|sr)", '', out, flags=re.IGNORECASE) # remove suffix
+        out = re.sub(r"[,\.]", '', out)# remove dumb punctuation
     return out, error
 
 def valid_email(email):
@@ -199,6 +205,9 @@ def format_dollars(dollars, type):
         return dollars, error
     out = f"${dollars:,}"
     return out, error
+
+
+
 
 state_abbreviations = {
     "Alabama": "AL",
