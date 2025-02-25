@@ -67,6 +67,12 @@ def verify(jl):
                     updated_value = format_zip(value)
                 elif header == "County":
                     updated_value, error = proper_name(value, 'county')
+                elif header == "Listing Price":
+                    updated_value, error = format_dollars(value, 'listing')#re.sub("[^0-9]", "", value)
+                elif header == "Loan Amount":
+                    updated_value, error = format_dollars(value, 'listing')#re.sub("[^0-9]", "", value)
+                elif header == "Credit Amount":
+                    updated_value, error = format_dollars(value, 'listing')#re.sub("[^0-9]", "", value)
 
                 if error:
                     error_msg += error + ', '
@@ -156,6 +162,13 @@ def format_state(state):
 
 def format_zip(zip):
     return re.sub(r"\D", "", zip)[:5]
+
+def format_dollars(dollars, type):
+    error = None
+    dollars = re.sub(r"[^0-9]", "", dollars)
+    if not dollars:
+        error = 'Missing ' + type
+    return dollars, error
 
 state_abbreviations = {
     "Alabama": "AL",
