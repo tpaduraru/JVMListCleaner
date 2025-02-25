@@ -10,13 +10,16 @@ def verify(jl):
         reader = list(csv.DictReader(csvfile))
         headers = list(reader[0].keys())
 
-        required_columns = ["Listing Price", "Loan Amount", "Credit Amount", "Errors"]
+
+        required_columns = ["Listing Price", "Loan Amount", "Credit Amount", "Errors", 
+                            "Marketing List Date", "Marketing List Type"]
         for col in required_columns:
             if col not in headers:
                 headers.append(col)
 
         header_order = ["Email", "Phone", "Street Address", "City", "State", "Zip Code", "County",
-                        "Listing Price", "Loan Amount", "Credit Amount", "First Name", "Last Name", "Errors"]
+                        "Listing Price", "Loan Amount", "Credit Amount", "First Name", "Last Name", "Errors", 
+                        "Marketing List Date", "Marketing List Type"]
 
         updated_headers = {
             "Email": "Email",
@@ -31,9 +34,12 @@ def verify(jl):
             "Credit Amount": "Credit Amount",
             "First Name": "FirstName",
             "Last Name": "LastName",
-            "Errors": "Errors"
+            "Errors": "Errors",
+            "Marketing List Date": "Marketing List Date", 
+            "Marketing List Type": "Marketing List Type"
         }
 
+       
         for row in reader:
             updated_row = {updated_headers.get(col, col): row.get(col, "").strip() for col in header_order}
             row_be_good = True  
@@ -81,6 +87,9 @@ def verify(jl):
                 updated_row[updated_headers[header]] = updated_value
 
             updated_row["Errors"] = error_msg.strip(", ") if not row_be_good else ""
+            updated_row["Marketing List Type"] = jl.list_type_value.get()
+            updated_row["Marketing List Date"] = jl.list_date_value
+        
             updated_rows.append(updated_row)
 
             if row_be_good:

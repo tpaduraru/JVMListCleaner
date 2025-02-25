@@ -82,6 +82,7 @@ list_info_title.pack(anchor="w", padx=25, pady=10)
 list_date_title = tk.Label(jl.root, text="List Date: ", font=('Arial', 12))
 list_date_title.pack(anchor="w", padx=25, pady=10)
 
+jl.list_date_value = jl.list_date_value_default
 list_date_input = tk.Text(jl.root, height=1, width=11)
 list_date_input.insert('1.0', jl.list_date_value)
 list_date_input.place(x=110, y=263)

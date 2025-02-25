@@ -63,6 +63,15 @@ def map(jl):
                 jl.dropdown_options[idx].set(header) 
                 jl.field_dict[jl.fields[idx]] = header
                 break
+    
+    # Find type from filename jl.input_file_path
+    file_name_split = jl.input_file_path.get().split('/')[-1].lower().split(' ')
+
+    jl.list_type_value.set('')
+    for k in jl.list_type_options:
+        if k.lower() in file_name_split:
+            jl.list_type_value.set(k)
+            break;
 
     jl.row_count_str.set(jl.read_rows)
         
