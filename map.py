@@ -62,18 +62,11 @@ def map(jl):
                 break
     
     # Find type from filename jl.input_file_path
-    file_name_split = jl.input_file_path.get().split('/')[-1].split(' ')
-    file_type_keywords = [
-        'SPCP',
-        'FTHB',
-        'Homerun',
-        'Stale',
-        'Ratebreak'
-    ]
+    file_name_split = jl.input_file_path.get().split('/')[-1].lower().split(' ')
 
     jl.list_type_value.set('')
-    for k in file_type_keywords:
-        if k in file_name_split:
+    for k in jl.list_type_options:
+        if k.lower() in file_name_split:
             jl.list_type_value.set(k)
             break;
 
