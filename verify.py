@@ -11,8 +11,7 @@ def verify(jl):
         headers = list(reader[0].keys())
 
 
-        required_columns = ["Listing Price", "Loan Amount", "Credit Amount", "Errors", 
-                            "ContactId", "Owner Name", "OwnerId", "BDO Owner", "Contact Owner", 
+        required_columns = ["Errors", "ContactId", "Owner Name", "OwnerId", "BDO Owner", "Contact Owner", 
                             "RecordTypeId", "Type", "Lead Source", "Marketing List Date", "Marketing List Type"]
         
         for col in required_columns:
