@@ -98,6 +98,14 @@ def verify(jl):
                 updated_row[updated_headers[header]] = updated_value
 
             updated_row["Errors"] = error_msg.strip(", ") if not row_be_good else ""
+            # updated_row["ContactId"] = '' #to do
+            # updated_row["Owner Name"] = '' #to do
+            # updated_row["OwnerId"] = '' #to do
+            # updated_row["BDO Owner"] = '' #to do
+            # updated_row["Contact Owner"] = '' #to do
+            updated_row["RecordTypeId"] = '0013l00002X71zdAAB'
+            updated_row["Type"] = 'Realtor'
+            updated_row["Lead Source"] = 'MLS'
             updated_row["Marketing List Type"] = jl.list_type_value.get()
             updated_row["Marketing List Date"] = jl.list_date_value
         
