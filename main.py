@@ -73,7 +73,7 @@ map_button.pack(anchor="w", padx=20, pady=20)
 
 # Verify Button
 verify_button = tk.Button(jl.root, text='Clean File', state=tk.DISABLED, command=lambda: verify(jl))
-verify_button.place(x=250, y=375)
+verify_button.place(x=250, y=475)
 
 # List Info
 list_info_title = tk.Label(jl.root, text="List Info", font=('Arial', 14))
@@ -139,7 +139,7 @@ dropdown_frame = tk.Frame(jl.root)
 dropdown_frame.place(x=250, y=55)
 
 jl.fields = [
-    "First Name", "Last Name", "Email", "Phone", "Street Address", "City", "State", "Zip Code", "County"
+    "First Name", "Last Name", "Email", "Phone", "Street Address", "City", "State", "Zip Code", "County", "Listing Price", "Loan Amount", "Credit Amount"
 ]
 
 jl.field_dict = {}  # field type : csv header

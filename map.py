@@ -43,7 +43,10 @@ def map(jl):
         5: ["city"],                  
         6: ["state"],                  
         7: ["zip", "code", "postal"],                    
-        8: ["county"] 
+        8: ["county"],
+        9: ["listing price", "price", "list price"],
+        10: ["loan amount", "loan"],
+        11: ["credit amount", "credit"]
     }
 
     # Iterate through headers and assign best matches to dropdowns
