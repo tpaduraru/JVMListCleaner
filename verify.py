@@ -23,7 +23,7 @@ def verify(jl):
 
         header_order = ["Email", "Phone", "Street Address", "City", "State", "Zip Code", "County",
                         "Listing Price", "Loan Amount", "Credit Amount", "First Name", "Last Name", "Errors", 
-                        "ContactId", "Owner Name", "OwnerId", "BDO Owner", "Contact Owner", 
+                        "ContactId", "Owner Name", "OwnerId", "BDO Owner", "Contact Owner", "AccountId",
                         "RecordTypeId", "Type", "Lead Source", "Marketing List Date", "Marketing List Type"]
 
         updated_headers = {
@@ -45,6 +45,7 @@ def verify(jl):
             "OwnerId": "OwnerId",
             "BDO Owner": "BDO Owner",
             "Contact Owner": "Contact Owner",
+            "AccountId": "AccountId",
             "RecordTypeId": "RecordTypeId",
             "Type": "Type",
             "Lead Source": "Lead Source",
@@ -108,7 +109,8 @@ def verify(jl):
             # updated_row["OwnerId"] = '' #to do
             # updated_row["BDO Owner"] = '' #to do
             # updated_row["Contact Owner"] = '' #to do
-            updated_row["RecordTypeId"] = '0013l00002X71zdAAB'
+            updated_row["RecordTypeId"] = '0121N000000qrYwQAI'
+            updated_row["AccountId"] = '0013l00002X71zdAAB'
             updated_row["Type"] = 'Realtor'
             updated_row["Lead Source"] = 'MLS'
             updated_row["Marketing List Type"] = jl.list_type_value.get()
