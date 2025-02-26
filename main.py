@@ -42,7 +42,7 @@ def update_field_dict(event):
 
 # Initialize root window
 jl.root = tk.Tk()
-jl.root.geometry("600x550")
+jl.root.geometry("600x600")
 jl.root.title("JVM List Cleaner")
 jl.root.iconbitmap("res/icon.ico")
 
@@ -130,6 +130,11 @@ error_title.pack(anchor="w", padx=25, pady=10)
 jl.error_count_str = tk.IntVar(value=jl.error_rows)
 jl.error_count = tk.Label(jl.root, textvariable=jl.error_count_str, font=('Arial', 12))
 jl.error_count.place(x=125, y=481)
+
+jl.error_box = tk.Text(jl.root, width=50, height=2)
+jl.error_box.insert(tk.INSERT, "This is the new text!")
+jl.error_box.config(state=tk.DISABLED)
+jl.error_box.place(x=100, y=530)
 
 
 # Dropdown Menus Section

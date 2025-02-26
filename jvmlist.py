@@ -22,6 +22,7 @@ class JVMList:
     successful_rows_str = None
     error_count = None
     error_count_str = None
+    error_box = None
     list_date_value = None
     list_type_value = None
     list_date_value_default = datetime.today().strftime('%m/%d/%y')
