@@ -131,10 +131,10 @@ jl.error_count_str = tk.IntVar(value=jl.error_rows)
 jl.error_count = tk.Label(jl.root, textvariable=jl.error_count_str, font=('Arial', 12))
 jl.error_count.place(x=125, y=481)
 
-jl.error_box = tk.Text(jl.root, width=50, height=2)
-jl.error_box.insert(tk.INSERT, "This is the new text!")
-jl.error_box.config(state=tk.DISABLED)
-jl.error_box.place(x=100, y=530)
+jl.status_box = tk.Text(jl.root, width=50, height=2)
+jl.status_box.insert(tk.INSERT, "This is the new text!")
+jl.status_box.config(state=tk.DISABLED)
+jl.status_box.place(x=100, y=530)
 
 
 # Dropdown Menus Section
