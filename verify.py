@@ -14,8 +14,8 @@ def verify(jl):
         headers = list(reader[0].keys())
 
 
-        required_columns = ["Errors", "ContactId", "Owner Name", "OwnerId", "BDO Owner", "Contact Owner", 
-                            "RecordTypeId", "Type", "Lead Source", "Marketing List Date", "Marketing List Type"]
+        required_columns = ["Errors", "ContactId", "Owner Name", "OwnerId", "BDO Owner", "Contact Owner", "Company Name",
+                            "AccountId", "RecordTypeId", "Type", "Lead Source", "Marketing List Date", "Marketing List Type"]
         
         for col in required_columns:
             if col not in headers:
@@ -23,7 +23,7 @@ def verify(jl):
 
         header_order = ["Email", "Phone", "Street Address", "City", "State", "Zip Code", "County",
                         "Listing Price", "Loan Amount", "Credit Amount", "First Name", "Last Name", "Errors", 
-                        "ContactId", "Owner Name", "OwnerId", "BDO Owner", "Contact Owner", "AccountId",
+                        "ContactId", "Owner Name", "OwnerId", "BDO Owner", "Contact Owner", "Company Name", "AccountId",
                         "RecordTypeId", "Type", "Lead Source", "Marketing List Date", "Marketing List Type"]
 
         updated_headers = {
@@ -45,6 +45,7 @@ def verify(jl):
             "OwnerId": "OwnerId",
             "BDO Owner": "BDO Owner",
             "Contact Owner": "Contact Owner",
+            "Company Name": "Company Name",
             "AccountId": "AccountId",
             "RecordTypeId": "RecordTypeId",
             "Type": "Type",
@@ -109,6 +110,7 @@ def verify(jl):
             # updated_row["OwnerId"] = '' #to do
             # updated_row["BDO Owner"] = '' #to do
             # updated_row["Contact Owner"] = '' #to do
+            updated_row["Company Name"] = 'JVM Partner'
             updated_row["RecordTypeId"] = '0121N000000qrYwQAI'
             updated_row["AccountId"] = '0013l00002X71zdAAB'
             updated_row["Type"] = 'Realtor'
