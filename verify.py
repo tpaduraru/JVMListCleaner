@@ -150,15 +150,16 @@ def proper_name(name, type):
         error += 'Removed (' + re.findall(r"\((.*?)\)", out)[0] + ') from ' + type 
         out = re.sub(r"\(.*?\)", "", out) 
 
-    if type in {'firstname', 'lastname'}:
+    if type in {'first_name', 'last_name'}:
         for word in name.lower().split():
             if word in {'the', 'team', 'group', 'true'}:
                 error += 'Invalid '+ type
                 break
-    if type == 'firstname' and len(re.sub(r"[^a-zA-Z]", "", name)) <= 2:
-        error += 'Verify ' + type
-    if type == 'lastname':
 
+    if type == 'first_name' and len(re.sub(r"[^a-zA-Z]", "", name)) <= 2:
+        error += 'Verify ' + type
+
+    if type == 'last_name':
         out = re.sub(r"\s(iii|ii|iv|jr|sr)", '', out, flags=re.IGNORECASE) # remove suffix
         out = re.sub(r"[,\.]", '', out)# remove dumb punctuation
     return out, error
