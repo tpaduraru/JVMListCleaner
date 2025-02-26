@@ -2,12 +2,12 @@ import csv
 import re
 import tkinter as tk
 from jvmlist import JVMList
-from jvmlist import JVMDb
+# from jvmlist import JVMDb
 
 
 def verify(jl):
     updated_rows = []
-    db = JVMDb()
+    # db = JVMDb()
     
     with open(jl.input_file_path.get(), "r", newline="", encoding='utf-8') as csvfile:
         reader = list(csv.DictReader(csvfile))
@@ -74,9 +74,9 @@ def verify(jl):
                     updated_value, error = proper_name(value, 'last_name')
                 elif header == "Email":
                     updated_value, error = valid_email(value)
-                    if not error:
-                        print(db.get_id(value))
-                        print(db.get_owner(value))
+                    # if not error:
+                    #     print(db.get_id(value))
+                    #     print(db.get_owner(value))
                 elif header == "Phone":
                     updated_value, error = valid_phone(value)
                 elif header == "Street Address":
