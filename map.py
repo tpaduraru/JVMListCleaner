@@ -16,7 +16,7 @@ def map(jl):
             for row in reader:
                 if any(row):  # Only count non-empty rows
                     jl.read_rows += 1
-        jl.append_status_box(f'... File read successfully')
+        jl.append_status_box(f'... {jl.read_rows} rows successfully')
 
     except Exception as e:
         print(f"Error reading file: {e}")

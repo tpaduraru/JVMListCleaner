@@ -8,12 +8,12 @@ from jvmlist import JVMList
 def verify(jl):
     updated_rows = []
     # db = JVMDb()
-    jl.overwrite_status_box('Cleaning up the file: ')
+    jl.overwrite_status_box(f'Attempting to clean file: {jl.get_file_name()}')
     
     with open(jl.input_file_path.get(), "r", newline="", encoding='utf-8') as csvfile:
         reader = list(csv.DictReader(csvfile))
         headers = list(reader[0].keys())
-
+        jl.append_status_box(f'... File read successfully')
 
         required_columns = ["Errors", "ContactId", "Owner Name", "OwnerId", "BDO Owner", "Contact Owner", "Company Name",
                             "AccountId", "RecordTypeId", "Type", "Lead Source", "Marketing List Date", "Marketing List Type"]
@@ -54,12 +54,14 @@ def verify(jl):
             "Marketing List Date": "Marketing List Date",
             "Marketing List Type": "Marketing List Type",
         }
-
+        jl.append_status_box(f'... Headers mapped')
        
+        progress = 0
         for row in reader:
             updated_row = {updated_headers.get(col, col): row.get(col, "").strip() for col in header_order}
             row_be_good = True  
             error_msg = "" 
+
 
             for header, column in jl.field_dict.items():
                 if column not in headers:
@@ -102,6 +104,7 @@ def verify(jl):
                 if error:
                     error_msg += error + ', '
                     row_be_good = False
+                    jl.append_status_box(f'... {jl.successful_rows + jl.error_rows}:{header}: {error}')
 
                 updated_row[updated_headers[header]] = updated_value
 
@@ -123,7 +126,7 @@ def verify(jl):
 
             if row_be_good:
                 jl.successful_rows += 1
-                print(f"Row {jl.successful_rows + jl.error_rows} read successfully")
+               #print(f"Row {jl.successful_rows + jl.error_rows} read successfully")
             else:
                 jl.error_rows += 1
                 print(f"Row {jl.successful_rows + jl.error_rows} failed formatting: {error_msg}")
