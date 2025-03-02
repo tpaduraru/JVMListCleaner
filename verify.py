@@ -56,12 +56,10 @@ def verify(jl):
         }
         jl.append_status_box(f'... Headers mapped')
        
-        progress = 0
         for row in reader:
             updated_row = {updated_headers.get(col, col): row.get(col, "").strip() for col in header_order}
             row_be_good = True  
             error_msg = "" 
-
 
             for header, column in jl.field_dict.items():
                 if column not in headers:
@@ -104,7 +102,7 @@ def verify(jl):
                 if error:
                     error_msg += error + ', '
                     row_be_good = False
-                    jl.append_status_box(f'... {jl.successful_rows + jl.error_rows}:{header}: {error}')
+                    jl.append_status_box(f'... Error on line: {jl.successful_rows + jl.error_rows}:{header}')
 
                 updated_row[updated_headers[header]] = updated_value
 

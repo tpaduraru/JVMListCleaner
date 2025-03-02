@@ -35,6 +35,7 @@ class JVMList:
 
     def overwrite_status_box(self, text):
         self.status_box.config(state=tk.NORMAL)
+        self.status_box.delete("1.0", tk.END)
         self.status_box.insert(tk.INSERT, text)
         self.status_box.see(tk.INSERT)
         self.status_box.config(state=tk.DISABLED)
