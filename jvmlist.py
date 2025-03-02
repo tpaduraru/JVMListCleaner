@@ -36,11 +36,13 @@ class JVMList:
     def overwrite_status_box(self, text):
         self.status_box.config(state=tk.NORMAL)
         self.status_box.insert(tk.INSERT, text)
+        self.status_box.see(tk.INSERT)
         self.status_box.config(state=tk.DISABLED)
     
     def append_status_box(self, text):
         self.status_box.config(state=tk.NORMAL)
         self.status_box.insert(tk.CURRENT, '\n'+ text)
+        self.status_box.see(tk.END)
         self.status_box.config(state=tk.DISABLED)
 
 
