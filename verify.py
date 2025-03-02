@@ -8,6 +8,7 @@ from jvmlist import JVMList
 def verify(jl):
     updated_rows = []
     # db = JVMDb()
+    jl.overwrite_status_box('Cleaning up the file: ')
     
     with open(jl.input_file_path.get(), "r", newline="", encoding='utf-8') as csvfile:
         reader = list(csv.DictReader(csvfile))

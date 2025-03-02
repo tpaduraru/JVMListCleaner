@@ -28,6 +28,22 @@ class JVMList:
     list_date_value_default = datetime.today().strftime('%m/%d/%y')
     list_type_options = ['SPCP', 'FTHB', 'Homerun', 'Stale', 'Ratebreak']
 
+    def get_file_name(self):
+        if self.input_file_path:
+            return self.input_file_path.get().split('/')[-1]
+        return None
+
+    def overwrite_status_box(self, text):
+        self.status_box.config(state=tk.NORMAL)
+        self.status_box.insert(tk.INSERT, text)
+        self.status_box.config(state=tk.DISABLED)
+    
+    def append_status_box(self, text):
+        self.status_box.config(state=tk.NORMAL)
+        self.status_box.insert(tk.CURRENT, '\n'+ text)
+        self.status_box.config(state=tk.DISABLED)
+
+
 # class JVMDb:
 #     file_path = None
 #     file = None
