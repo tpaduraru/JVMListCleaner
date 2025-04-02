@@ -152,9 +152,13 @@ def proper_name(name, type):
     out = re.sub(r"(?<!\w)(o')(\w)", lambda m: m.group(1).capitalize() + m.group(2).capitalize(), out, flags=re.IGNORECASE)
     out = re.sub(r"-(\w)", lambda m: '-' + m.group(1).capitalize(), out, flags=re.IGNORECASE)
 
-    if re.search(r"[\(\)]", out): 
-        error += 'Removed (' + re.findall(r"\((.*?)\)", out)[0] + ') from ' + type 
-        out = re.sub(r"\(.*?\)", "", out) 
+    if re.search(r"[\(\)]", out):
+        missing = re.findall(r"\((.*?)\)", out)
+        if missing:
+            error += 'Removed (' + missing[0] + ') from ' + type
+            out = re.sub(r"\(.*?\)", "", out)
+        error += 'Invalid ' + type
+        out = re.sub(r"\(.*?\)", "", out)
 
     if type in {'first_name', 'last_name'}:
         for word in name.lower().split():
